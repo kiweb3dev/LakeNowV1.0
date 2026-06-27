@@ -11,9 +11,9 @@ export default function Home() {
       {/* HERO */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
 
-        <div className="text-5xl mb-4">🚤</div>
+        <div className="text-6xl mb-4">🚤</div>
 
-        <h1 className="text-5xl font-black tracking-tight">
+        <h1 className="text-6xl font-black tracking-tight">
           LakeNow
         </h1>
 
@@ -21,46 +21,47 @@ export default function Home() {
           Transportation. Delivered.
         </p>
 
-        <p className="mt-6 text-sm text-white/60 max-w-md">
-          Around Town • On the Lake • On Your Schedule
+        <p className="mt-4 text-sm text-white/50 max-w-md">
+          Ride • Deliver • Captain
         </p>
 
-        {/* CORE QUESTION */}
         <div className="mt-10 text-xl font-semibold">
           Where are you now?
         </div>
 
-        {/* OPTIONS */}
+        <p className="mt-2 text-sm text-white/50">
+          Choose your starting point
+        </p>
+
+        {/* BUTTONS */}
         <div className="mt-8 w-full max-w-md space-y-4">
 
-          {/* Around Town */}
           <button
             onClick={() => router.push("/around-town")}
-            className="w-full rounded-2xl bg-blue-600 p-6 text-left hover:bg-blue-500 transition"
+            className="w-full rounded-3xl bg-blue-600/90 p-6 text-left hover:bg-blue-500 transition shadow-lg"
           >
-            <div className="text-2xl">🚗 Around Town</div>
+            <div className="text-2xl font-bold">🚗 Around Town</div>
             <div className="text-sm text-white/80 mt-1">
-              Rides & Deliveries
+              Rides & Deliveries in Town
             </div>
           </button>
 
-          {/* On the Lake */}
           <button
             onClick={() => router.push("/on-the-lake")}
-            className="w-full rounded-2xl bg-teal-600 p-6 text-left hover:bg-teal-500 transition"
+            className="w-full rounded-3xl bg-teal-600/90 p-6 text-left hover:bg-teal-500 transition shadow-lg"
           >
-            <div className="text-2xl">🌊 On the Lake</div>
+            <div className="text-2xl font-bold">🌊 On the Lake</div>
             <div className="text-sm text-white/80 mt-1">
-              Water Taxi • Boat Delivery • Captain
+              Water Taxi • Boat Delivery • Captain Service
             </div>
           </button>
 
         </div>
       </div>
 
-      {/* TRUST BAR */}
-      <div className="p-6 text-center text-xs text-white/50 border-t border-white/10">
-        ✓ Local Operators • ✓ Fast Dispatch • ✓ Lake of the Ozarks
+      {/* TRUST */}
+      <div className="mt-10 border-t border-white/10 py-6 text-center text-xs text-white/50">
+        ✓ Local Operators • ✓ Real-Time Dispatch • ✓ Lake of the Ozarks
       </div>
 
     </main>
