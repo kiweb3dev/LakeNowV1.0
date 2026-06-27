@@ -1,115 +1,128 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-export default function CaptainMyBoat() {
+export default function CaptainMyBoatPage() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const [form, setForm] = useState({
     name: "",
     phone: "",
-    location: "",
-    boatType: "",
+    boat_location: "",
     duration: "",
     notes: "",
   });
 
-  const update = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const submit = async () => {
-    if (!form.phone || !form.location) {
-      alert("Please enter location and phone");
+  async function submitRequest() {
+    // Basic validation (launch-safe)
+    if (!form.phone.trim() || !form.boat_location.trim()) {
+      alert("Please provide phone and boat location.");
       return;
     }
+
+    setLoading(true);
 
     const { error } = await supabase.from("requests").insert([
-{
-  name: form.name,
-  phone: form.phone,
-  location: form.location,
-  boatType: form.boatType,
-  duration: form.duration,
-  notes: form.notes,
+  {
+    type: "captain_request",
+    name: form.name,
+    phone: form.phone,
+    pickup: form.boat_location,
+    destination: null,
+    items: form.notes,
+    status: "pending",
+    created_at: new Date().toISOString(),
+  },
+]);
 
-  type: "captain_request",
-  created_at: new Date().toISOString(),
-},
-    ]);
+    setLoading(false);
 
     if (error) {
-      console.log(error);
-      alert("Error submitting request");
+      alert(error.message);
       return;
     }
 
-    alert("🛥 Captain request sent! We’re assigning a driver.");
-
-    setForm({
-      name: "",
-      phone: "",
-      location: "",
-      boatType: "",
-      duration: "",
-      notes: "",
-    });
-  };
+    router.push("/request-received");
+  }
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white p-6">
+    <main className="min-h-screen bg-black text-white flex justify-center p-6">
+      <div className="w-full max-w-md">
 
-      <h1 className="text-3xl font-bold">🛥 Captain My Boat</h1>
-      <p className="text-white/60 mt-1">
-        Professional boat operators when you need them
-      </p>
+        {/* HEADER */}
+        <h1 className="text-3xl font-bold text-center">
+          🛥 Captain My Boat
+        </h1>
 
-      <div className="mt-6 space-y-3 max-w-md">
+        <p className="text-center text-white/70 mt-3 mb-8">
+          Relax and enjoy the lake. We’ll handle the driving.
+        </p>
 
-        <input
-          name="location"
-          placeholder="Boat location (dock / cove)"
-          onChange={update}
-          value={form.location}
-          className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
-        />
+        {/* FORM */}
+        <div className="space-y-4">
 
-        <input
-          name="boatType"
-          placeholder="Boat type (optional)"
-          onChange={update}
-          value={form.boatType}
-          className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
-        />
+          <input
+            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
+            placeholder="Your Name (optional)"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
 
-        <input
-          name="duration"
-          placeholder="How long do you need a captain?"
-          onChange={update}
-          value={form.duration}
-          className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
-        />
+          <input
+            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
+            placeholder="Phone Number *"
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+          />
 
-        <input
-          name="phone"
-          placeholder="Phone number"
-          onChange={update}
-          value={form.phone}
-          className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
-        />
+          <input
+            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
+            placeholder="Boat Location / Marina / Dock *"
+            value={form.boat_location}
+            onChange={(e) =>
+              setForm({ ...form, boat_location: e.target.value })
+            }
+          />
 
-        <textarea
-          name="notes"
-          placeholder="Special instructions (optional)"
-          onChange={update}
-          value={form.notes}
-          className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
-        />
+          <input
+            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
+            placeholder="How long do you need a captain? (optional)"
+            value={form.duration}
+            onChange={(e) =>
+              setForm({ ...form, duration: e.target.value })
+            }
+          />
 
+          <textarea
+            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
+            rows={4}
+            placeholder="Anything we should know? (optional)"
+            value={form.notes}
+            onChange={(e) =>
+              setForm({ ...form, notes: e.target.value })
+            }
+          />
+
+        </div>
+
+        {/* SUBMIT */}
         <button
-          onClick={submit}
-          className="w-full bg-green-600 text-white p-4 rounded-xl font-bold hover:bg-green-500 transition"
+          onClick={submitRequest}
+          disabled={loading}
+          className="w-full mt-8 rounded-xl bg-purple-600 py-4 text-lg font-bold hover:bg-purple-500 transition disabled:opacity-50"
         >
-          Request Captain
+          {loading ? "Sending Request..." : "Request a Captain"}
+        </button>
+
+        {/* BACK */}
+        <button
+          onClick={() => router.back()}
+          className="w-full mt-4 rounded-xl border border-white/20 py-4 text-white/70 hover:bg-white/10"
+        >
+          Back
         </button>
 
       </div>
