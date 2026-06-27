@@ -1,62 +1,68 @@
-import Hero from "@/components/Hero";
-import ServiceCard from "@/components/ServiceCard";
+"use client";
+
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
+
   return (
-    <main className="min-h-screen bg-slate-100">
-      <Hero
-        title="LakeNow"
-        subtitle="Ride • Deliver • Captain"
-        tagline="Around Town. On the Lake. On Your Schedule."
-      />
+    <main className="min-h-screen bg-slate-950 text-white flex flex-col">
 
-      <section className="mx-auto max-w-6xl px-6 py-12">
-        <h2 className="mb-8 text-center text-3xl font-bold">
-          What do you need today?
-        </h2>
+      {/* HERO */}
+      <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
 
-        <div className="grid gap-6 md:grid-cols-2">
-          <ServiceCard
-            icon="🚗"
-            title="Get a Ride"
-            slogan="Your Destination. Our Driver."
-            description="Safe transportation to bars, restaurants, hotels, vacation rentals, marinas, and home."
-            href="/around-town/ride"
-            color="blue"
-            button="Request Ride"
-          />
+        <div className="text-5xl mb-4">🚤</div>
 
-          <ServiceCard
-            icon="🚤"
-            title="Water Taxi"
-            slogan="Your Dock. Our Boat."
-            description="Fast dock-to-dock transportation across Lake of the Ozarks."
-            href="/on-the-lake/water-taxi"
-            color="teal"
-            button="Request Water Taxi"
-          />
+        <h1 className="text-5xl font-black tracking-tight">
+          LakeNow
+        </h1>
 
-          <ServiceCard
-            icon="📦"
-            title="Delivery"
-            slogan="Your Order. Delivered."
-            description="Food, drinks, groceries, ice, and supplies delivered around town or directly to your dock."
-            href="/delivery"
-            color="orange"
-            button="Request Delivery"
-          />
+        <p className="mt-3 text-lg text-white/80">
+          Transportation. Delivered.
+        </p>
 
-          <ServiceCard
-            icon="🛥️"
-            title="Captain My Boat"
-            slogan="Your Boat. Our Captain."
-            description="Need someone to operate your boat? We'll drive your boat so everyone gets where they need to go safely."
-            href="/on-the-lake/captain"
-            color="green"
-            button="Request Captain"
-          />
+        <p className="mt-6 text-sm text-white/60 max-w-md">
+          Around Town • On the Lake • On Your Schedule
+        </p>
+
+        {/* CORE QUESTION */}
+        <div className="mt-10 text-xl font-semibold">
+          Where are you now?
         </div>
-      </section>
+
+        {/* OPTIONS */}
+        <div className="mt-8 w-full max-w-md space-y-4">
+
+          {/* Around Town */}
+          <button
+            onClick={() => router.push("/around-town")}
+            className="w-full rounded-2xl bg-blue-600 p-6 text-left hover:bg-blue-500 transition"
+          >
+            <div className="text-2xl">🚗 Around Town</div>
+            <div className="text-sm text-white/80 mt-1">
+              Rides & Deliveries
+            </div>
+          </button>
+
+          {/* On the Lake */}
+          <button
+            onClick={() => router.push("/on-the-lake")}
+            className="w-full rounded-2xl bg-teal-600 p-6 text-left hover:bg-teal-500 transition"
+          >
+            <div className="text-2xl">🌊 On the Lake</div>
+            <div className="text-sm text-white/80 mt-1">
+              Water Taxi • Boat Delivery • Captain
+            </div>
+          </button>
+
+        </div>
+      </div>
+
+      {/* TRUST BAR */}
+      <div className="p-6 text-center text-xs text-white/50 border-t border-white/10">
+        ✓ Local Operators • ✓ Fast Dispatch • ✓ Lake of the Ozarks
+      </div>
+
     </main>
   );
 }
