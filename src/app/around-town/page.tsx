@@ -2,56 +2,58 @@
 
 import { useRouter } from "next/navigation";
 
-export default function AroundTown() {
+import Logo from "@/components/Logo";
+import PageContainer from "@/components/PageContainer";
+import PrimaryButton from "@/components/PrimaryButton";
+
+export default function AroundTownPage() {
   const router = useRouter();
 
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col items-center p-6">
+    <PageContainer>
 
-      {/* HEADER */}
-      <h1 className="text-3xl font-bold mt-6 text-center">
-        🚗 Around Town
-      </h1>
+      {/* Logo */}
+      <Logo size={70} />
 
-      <p className="text-white/60 text-sm text-center mt-2 max-w-md">
-        Fast local rides and deliveries around Lake of the Ozarks area.
-      </p>
+      {/* Header */}
+      <div className="mt-10 text-center">
 
-      {/* OPTIONS */}
-      <div className="w-full max-w-sm mt-10 space-y-4">
+        <h2 className="text-3xl font-bold">
+          🚗 Car Rides & Delivery
+        </h2>
 
-        {/* RIDE */}
-        <button
-          onClick={() => router.push("/around-town/ride")}
-          className="w-full py-5 rounded-2xl bg-white text-black font-bold text-lg"
-        >
-          🚗 Get a Ride
-          <div className="text-xs font-normal mt-1">
-            From A → B anywhere nearby
-          </div>
-        </button>
-
-        {/* DELIVERY */}
-        <button
-          onClick={() => router.push("/around-town/delivery")}
-          className="w-full py-5 rounded-2xl bg-green-600 text-white font-bold text-lg"
-        >
-          📦 Delivery
-          <div className="text-xs font-normal mt-1 text-white/80">
-            We pick up & deliver items for you
-          </div>
-        </button>
+        <p className="mt-3 text-white/60">
+          Fast transportation and local deliveries around Lake of the Ozarks.
+        </p>
 
       </div>
 
-      {/* BACK */}
+      {/* Services */}
+      <div className="mt-10 flex-1 space-y-5">
+
+        <PrimaryButton
+          onClick={() => router.push("/around-town/ride")}
+        >
+          🚗 Request a Ride
+        </PrimaryButton>
+
+        <PrimaryButton
+          onClick={() => router.push("/around-town/delivery")}
+          className="bg-white/10 border border-white/20 hover:bg-white/20"
+        >
+          📦 Request Delivery
+        </PrimaryButton>
+
+      </div>
+
+      {/* Back Button */}
       <button
-        onClick={() => router.push("/")}
-        className="mt-10 text-white/40 text-sm"
+        onClick={() => router.back()}
+        className="pb-4 text-center text-white/50 hover:text-white transition"
       >
-        ← Back to Home
+        ← Back
       </button>
 
-    </main>
+    </PageContainer>
   );
 }

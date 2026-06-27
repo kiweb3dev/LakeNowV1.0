@@ -17,16 +17,23 @@ export default function BoatDeliveryPage() {
   });
 
   async function submitRequest() {
+    if (
+  !form.name.trim() ||
+  !form.phone.trim() ||
+  !form.pickup?.trim()
+) {
+  alert("Please complete required fields.");
+  return;
+}
     // Basic validation (launch-safe, not over-engineered)
     if (
-      !form.phone.trim() ||
-      !form.pickup.trim() ||
-      !form.destination.trim() ||
-      !form.items.trim()
-    ) {
-      alert("Please complete all required fields.");
-      return;
-    }
+  !form.name.trim() ||
+  !form.phone.trim() ||
+  !form.pickup?.trim()
+) {
+  alert("Please complete required fields.");
+  return;
+}
 
     setLoading(true);
 

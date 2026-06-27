@@ -17,11 +17,29 @@ export default function CaptainMyBoatPage() {
   });
 
   async function submitRequest() {
+    
+    if (!form.name.trim()) {
+  alert("Please enter your name.");
+  return;
+}
+
+if (
+  !form.name.trim() ||
+  !form.phone.trim() ||
+  !form.boat_location.trim()
+) {
+  alert("Please complete required fields.");
+  return;
+}
     // Basic validation (launch-safe)
-    if (!form.phone.trim() || !form.boat_location.trim()) {
-      alert("Please provide phone and boat location.");
-      return;
-    }
+    if (
+  !form.name.trim() ||
+  !form.phone.trim() ||
+  !form.boat_location.trim()
+) {
+  alert("Please complete required fields.");
+  return;
+}
 
     setLoading(true);
 

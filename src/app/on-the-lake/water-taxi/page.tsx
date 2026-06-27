@@ -18,14 +18,18 @@ export default function WaterTaxiPage() {
   });
 
   async function submitRequest() {
+    if (!form.name.trim()) {
+  alert("Please enter your name.");
+  return;
+}
     if (
-      !form.phone.trim() ||
-      !form.pickup.trim() ||
-      !form.destination.trim()
-    ) {
-      alert("Please complete all required fields.");
-      return;
-    }
+  !form.name.trim() ||
+  !form.phone.trim() ||
+  !form.pickup?.trim()
+) {
+  alert("Please complete required fields.");
+  return;
+}
 
     setLoading(true);
 

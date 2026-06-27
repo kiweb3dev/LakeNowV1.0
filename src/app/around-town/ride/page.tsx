@@ -17,14 +17,15 @@ export default function RidePage() {
   });
 
   async function submitRequest() {
-    if (
-      !form.phone.trim() ||
-      !form.pickup.trim() ||
-      !form.destination.trim()
-    ) {
-      alert("Please complete all required fields.");
-      return;
-    }
+    if (!form.name.trim()) {
+  alert("Please enter your name.");
+  return;
+}
+
+    if (!form.name.trim()) {
+  alert("Please enter your name.");
+  return;
+}
 
     setLoading(true);
 
