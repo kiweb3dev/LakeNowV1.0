@@ -12,16 +12,22 @@ type Request = {
   pickup?: string;
   destination?: string;
   items?: string;
-  boatType?: string;
   duration?: string;
   notes?: string;
   created_at: string;
   status?: string | null;
+  assigned_to?: string | null;
 };
 
 export default function Dispatch() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [filter, setFilter] = useState("all");
+
+  // 🔊 ALERT SOUND
+  const playSound = () => {
+    const audio = new Audio("/alert.mp3");
+    audio.play().catch(() => {});
+  };
 
   const fetchRequests = async () => {
     const { data, error } = await supabase
@@ -46,6 +52,7 @@ export default function Dispatch() {
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "requests" },
         (payload) => {
+          playSound();
           setRequests((prev) => [payload.new as Request, ...prev]);
         }
       )
@@ -63,12 +70,31 @@ export default function Dispatch() {
       .eq("id", id);
 
     if (error) {
-      console.log("STATUS UPDATE ERROR:", error);
+      console.log("STATUS ERROR:", error);
       return;
     }
 
     setRequests((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status } : r))
+    );
+  };
+
+  const assignJob = async (id: string) => {
+    const name = prompt("Assign to (driver name):");
+    if (!name) return;
+
+    const { error } = await supabase
+      .from("requests")
+      .update({ assigned_to: name })
+      .eq("id", id);
+
+    if (error) {
+      console.log("ASSIGN ERROR:", error);
+      return;
+    }
+
+    setRequests((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, assigned_to: name } : r))
     );
   };
 
@@ -159,6 +185,11 @@ export default function Dispatch() {
                 {req.items && <div>📦 Items: {req.items}</div>}
                 {req.duration && <div>⏱ Duration: {req.duration}</div>}
                 {req.notes && <div>📝 {req.notes}</div>}
+                {req.assigned_to && (
+                  <div className="text-purple-300">
+                    👤 Assigned: {req.assigned_to}
+                  </div>
+                )}
               </div>
 
               {/* ACTIONS */}
@@ -175,6 +206,13 @@ export default function Dispatch() {
                   className="px-3 py-1 bg-green-600 rounded text-sm"
                 >
                   Done
+                </button>
+
+                <button
+                  onClick={() => assignJob(req.id)}
+                  className="px-3 py-1 bg-purple-600 rounded text-sm"
+                >
+                  Assign
                 </button>
               </div>
 
