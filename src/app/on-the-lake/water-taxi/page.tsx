@@ -4,6 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
+import Logo from "@/components/Logo";
+import PageContainer from "@/components/PageContainer";
+import PrimaryButton from "@/components/PrimaryButton";
+import TextInput from "@/components/TextInput";
+
 export default function WaterTaxiPage() {
   const router = useRouter();
 
@@ -18,18 +23,15 @@ export default function WaterTaxiPage() {
   });
 
   async function submitRequest() {
-    if (!form.name.trim()) {
-  alert("Please enter your name.");
-  return;
-}
     if (
-  !form.name.trim() ||
-  !form.phone.trim() ||
-  !form.pickup?.trim()
-) {
-  alert("Please complete required fields.");
-  return;
-}
+      !form.name.trim() ||
+      !form.phone.trim() ||
+      !form.pickup.trim() ||
+      !form.destination.trim()
+    ) {
+      alert("Please complete all required fields.");
+      return;
+    }
 
     setLoading(true);
 
@@ -40,7 +42,7 @@ export default function WaterTaxiPage() {
         phone: form.phone,
         pickup: form.pickup,
         destination: form.destination,
-        passengers: form.passengers,
+        items: `${form.passengers} passenger(s)`,
         status: "pending",
         created_at: new Date().toISOString(),
       },
@@ -57,82 +59,87 @@ export default function WaterTaxiPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white flex justify-center p-6">
-      <div className="w-full max-w-md">
+    <PageContainer>
 
-        <h1 className="text-3xl font-bold text-center">
-          🚤 Request a Water Taxi
-        </h1>
+      <Logo size={64} />
 
-        <p className="text-center text-white/70 mt-3 mb-8">
-          Need a ride across the lake? We'll pick you up and get you where you need to go.
+      <div className="mt-8 text-center">
+        <h2 className="text-3xl font-bold">
+          🚤 Water Taxi
+        </h2>
+
+        <p className="mt-3 text-white/60">
+          Fast dock-to-dock transportation anywhere on the lake.
         </p>
+      </div>
 
-        <div className="space-y-4">
+      <div className="mt-8 space-y-5">
 
-          <input
-            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
-            placeholder="Your Name (optional)"
-            value={form.name}
-            onChange={(e) =>
-              setForm({ ...form, name: e.target.value })
-            }
-          />
+        <TextInput
+          label="Name"
+          placeholder="Your name"
+          value={form.name}
+          onChange={(e) =>
+            setForm({ ...form, name: e.target.value })
+          }
+        />
 
-          <input
-            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
-            placeholder="Phone Number *"
-            value={form.phone}
-            onChange={(e) =>
-              setForm({ ...form, phone: e.target.value })
-            }
-          />
+        <TextInput
+          label="Phone Number"
+          placeholder="Best number to reach you"
+          value={form.phone}
+          onChange={(e) =>
+            setForm({ ...form, phone: e.target.value })
+          }
+        />
 
-          <input
-            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
-            placeholder="Pickup Dock / Marina *"
-            value={form.pickup}
-            onChange={(e) =>
-              setForm({ ...form, pickup: e.target.value })
-            }
-          />
+        <TextInput
+          label="Pickup Dock"
+          placeholder="Where should we meet you?"
+          value={form.pickup}
+          onChange={(e) =>
+            setForm({ ...form, pickup: e.target.value })
+          }
+        />
 
-          <input
-            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
-            placeholder="Destination Dock / Marina *"
-            value={form.destination}
-            onChange={(e) =>
-              setForm({ ...form, destination: e.target.value })
-            }
-          />
+        <TextInput
+          label="Destination Dock"
+          placeholder="Where are you headed?"
+          value={form.destination}
+          onChange={(e) =>
+            setForm({ ...form, destination: e.target.value })
+          }
+        />
 
-          <input
-            className="w-full rounded-xl bg-white/10 border border-white/20 p-4 text-white placeholder:text-white/40"
-            placeholder="Number of Passengers"
-            value={form.passengers}
-            onChange={(e) =>
-              setForm({ ...form, passengers: e.target.value })
-            }
-          />
+        <TextInput
+          label="Passengers"
+          placeholder="How many passengers?"
+          value={form.passengers}
+          onChange={(e) =>
+            setForm({ ...form, passengers: e.target.value })
+          }
+        />
 
-        </div>
+      </div>
 
-        <button
+      <div className="mt-8 space-y-4">
+
+        <PrimaryButton
           onClick={submitRequest}
           disabled={loading}
-          className="w-full mt-8 rounded-xl bg-blue-600 py-4 text-lg font-bold hover:bg-blue-500 transition disabled:opacity-50"
         >
-          {loading ? "Sending Request..." : "Request a Water Taxi"}
-        </button>
+          {loading ? "Sending Request..." : "Request Water Taxi"}
+        </PrimaryButton>
 
         <button
           onClick={() => router.back()}
-          className="w-full mt-4 rounded-xl border border-white/20 py-4 text-white/70 hover:bg-white/10"
+          className="w-full rounded-3xl border border-white/15 py-4 text-white/60 transition hover:bg-white/10 hover:text-white"
         >
           Back
         </button>
 
       </div>
-    </main>
+
+    </PageContainer>
   );
 }

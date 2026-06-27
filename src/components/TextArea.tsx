@@ -1,25 +1,23 @@
 "use client";
 
-import { InputHTMLAttributes } from "react";
+import { TextareaHTMLAttributes } from "react";
 
-interface TextInputProps
-  extends InputHTMLAttributes<HTMLInputElement> {
+interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
 }
 
-export default function TextInput({
+export default function TextArea({
   label,
   className = "",
   ...props
-}: TextInputProps) {
+}: TextAreaProps) {
   return (
     <div className="w-full">
-
       <label className="mb-2 block text-sm font-semibold text-white/80">
         {label}
       </label>
 
-      <input
+      <textarea
         {...props}
         className={`
           w-full
@@ -38,7 +36,6 @@ export default function TextInput({
           ${className}
         `}
       />
-
     </div>
   );
 }

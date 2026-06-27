@@ -6,52 +6,68 @@ import { supabase } from "@/lib/supabase";
 type Request = {
   id: string;
   type: string | null;
-  phone: string;
-  location?: string;
-  pickup?: string;
-  destination?: string;
-  notes?: string;
+  name: string | null;
+  phone: string | null;
+  pickup: string | null;
+  destination: string | null;
+  items: string | null;
+  status: string | null;
   created_at: string;
-  status?: string | null;
-  assigned_to?: string | null;
 };
 
-const PRICE_MAP: Record<string, number> = {
-  water_taxi: 75,
-  boat_delivery: 25,
-  captain_request: 150,
-};
+function getServiceLabel(type: string | null) {
+  if (type === "ride") return "🚗 Ride";
+  if (type === "delivery") return "📦 Car Delivery";
+  if (type === "water_taxi") return "🚤 Water Taxi";
+  if (type === "boat_delivery") return "📦 Boat Delivery";
+  if (type === "captain_request") return "🛥 Captain My Boat";
+  return "Request";
+}
 
-export default function DispatchMobile() {
+export default function DispatchPage() {
   const [requests, setRequests] = useState<Request[]>([]);
-  const [filter, setFilter] = useState("all");
 
-  const playSound = () => {
-    const audio = new Audio("/alert.mp3");
-    audio.play().catch(() => {});
-  };
-
-  const fetchRequests = async () => {
-    const { data } = await supabase
+  async function fetchRequests() {
+    const { data, error } = await supabase
       .from("requests")
       .select("*")
       .order("created_at", { ascending: false });
 
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
     setRequests(data || []);
-  };
+  }
+
+  async function updateStatus(id: string, status: string) {
+    const { error } = await supabase
+      .from("requests")
+      .update({ status })
+      .eq("id", id);
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    setRequests((current) =>
+      current.map((request) =>
+        request.id === id ? { ...request, status } : request
+      )
+    );
+  }
 
   useEffect(() => {
     fetchRequests();
 
     const channel = supabase
-      .channel("mobile-ops")
+      .channel("dispatch-center")
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "requests" },
-        (payload) => {
-          playSound();
-          setRequests((prev) => [payload.new as Request, ...prev]);
-        }
+        { event: "*", schema: "public", table: "requests" },
+        () => fetchRequests()
       )
       .subscribe();
 
@@ -60,148 +76,108 @@ export default function DispatchMobile() {
     };
   }, []);
 
-  const updateStatus = async (id: string, status: string) => {
-    await supabase.from("requests").update({ status }).eq("id", id);
-
-    setRequests((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status } : r))
-    );
-  };
-
-  const assign = async (id: string) => {
-    const name = prompt("Assign to:");
-    if (!name) return;
-
-    await supabase.from("requests").update({ assigned_to: name }).eq("id", id);
-
-    setRequests((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, assigned_to: name } : r))
-    );
-  };
-
-  const getPrice = (type: string | null) => {
-    if (!type) return 0;
-    return PRICE_MAP[type] || 0;
-  };
-
-  const filtered = requests.filter((r) => {
-    if (filter === "all") return true;
-    return r.type === filter;
-  });
-
-  const totalRevenue = requests.reduce((sum, r) => {
-    if (r.status !== "accepted" && r.status !== "done") return sum;
-    return sum + getPrice(r.type);
-  }, 0);
-
   return (
-    <main className="min-h-screen bg-black text-white p-3">
+    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
+      <div className="mx-auto min-h-screen w-full max-w-md px-6 py-8">
 
-      {/* HEADER (MOBILE SAFE) */}
-      <div className="sticky top-0 bg-black py-2 z-10 border-b border-white/10">
-        <h1 className="text-xl font-bold">📱 LakeNow Ops</h1>
-
-        <div className="text-green-400 font-bold text-sm">
-          💰 ${totalRevenue} earned
+        <div className="text-center">
+          <h1 className="text-4xl font-extrabold">LakeNow</h1>
+          <p className="mt-1 text-sm uppercase tracking-[0.25em] text-white/50">
+            Dispatch Center
+          </p>
         </div>
-      </div>
 
-      {/* FILTER ROW (BIG TOUCH BUTTONS) */}
-      <div className="grid grid-cols-2 gap-2 mt-3">
-        {[
-          { key: "all", label: "ALL" },
-          { key: "water_taxi", label: "🚤 RIDE" },
-          { key: "boat_delivery", label: "📦 DROP" },
-          { key: "captain_request", label: "🛥 CAPT" },
-        ].map((f) => (
-          <button
-            key={f.key}
-            onClick={() => setFilter(f.key)}
-            className={`py-3 rounded-xl text-sm font-bold ${
-              filter === f.key
-                ? "bg-white text-black"
-                : "bg-white/10 text-white"
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
+        <div className="mt-8 rounded-3xl border border-white/15 bg-white/10 p-5">
+          <h2 className="text-2xl font-bold">Live Requests</h2>
+          <p className="mt-1 text-white/60">
+            Accept and complete customer requests here.
+          </p>
+        </div>
 
-      {/* CARDS */}
-      <div className="mt-4 space-y-3">
-
-        {filtered.length === 0 && (
-          <div className="text-white/50 text-sm">No jobs</div>
-        )}
-
-        {filtered.map((req) => {
-          const price = getPrice(req.type);
-          const status = req.status || "new";
-
-          return (
-            <div
-              key={req.id}
-              className={`p-3 rounded-xl border ${
-                status === "new"
-                  ? "border-yellow-400/40 bg-yellow-500/10"
-                  : status === "accepted"
-                  ? "border-blue-400/40 bg-blue-500/10"
-                  : "border-green-400/40 bg-green-500/10"
-              }`}
-            >
-
-              {/* TOP */}
-              <div className="flex justify-between items-center">
-                <div className="font-bold text-sm">
-                  {(req.type || "unknown").replaceAll("_", " ")}
-                </div>
-
-                <div className="text-green-400 font-bold text-sm">
-                  ${price}
-                </div>
-              </div>
-
-              {/* DETAILS */}
-              <div className="text-xs text-white/70 mt-2 space-y-1">
-                <div>📞 {req.phone}</div>
-                {req.location && <div>📍 {req.location}</div>}
-                {req.pickup && <div>🚤 {req.pickup}</div>}
-                {req.destination && <div>🎯 {req.destination}</div>}
-                {req.assigned_to && (
-                  <div className="text-purple-300">
-                    👤 {req.assigned_to}
-                  </div>
-                )}
-              </div>
-
-              {/* ACTIONS (BIG MOBILE BUTTONS) */}
-              <div className="grid grid-cols-3 gap-2 mt-3">
-                <button
-                  onClick={() => updateStatus(req.id, "accepted")}
-                  className="py-3 bg-blue-600 rounded-lg text-xs font-bold"
-                >
-                  ACCEPT
-                </button>
-
-                <button
-                  onClick={() => updateStatus(req.id, "done")}
-                  className="py-3 bg-green-600 rounded-lg text-xs font-bold"
-                >
-                  DONE
-                </button>
-
-                <button
-                  onClick={() => assign(req.id)}
-                  className="py-3 bg-purple-600 rounded-lg text-xs font-bold"
-                >
-                  ASSIGN
-                </button>
-              </div>
-
+        <div className="mt-6 space-y-4">
+          {requests.length === 0 && (
+            <div className="rounded-3xl border border-white/15 bg-white/10 p-6 text-center text-white/60">
+              No requests yet.
             </div>
-          );
-        })}
+          )}
+
+          {requests.map((request) => {
+            const status = request.status || "pending";
+
+            return (
+              <div
+                key={request.id}
+                className="rounded-3xl border border-white/15 bg-white/10 p-5 shadow-lg"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-xl font-bold">
+                      {getServiceLabel(request.type)}
+                    </h3>
+
+                    <p className="mt-1 text-xs text-white/50">
+                      {new Date(request.created_at).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold uppercase text-white">
+                    {status}
+                  </span>
+                </div>
+
+                <div className="mt-5 space-y-2 rounded-2xl bg-black/25 p-4 text-sm">
+                  <p className="text-white">
+                    👤 <span className="font-semibold">Name:</span>{" "}
+                    {request.name || "No name"}
+                  </p>
+
+                  <p className="text-white">
+                    📞 <span className="font-semibold">Phone:</span>{" "}
+                    {request.phone || "No phone"}
+                  </p>
+
+                  {request.pickup && (
+                    <p className="text-white/80">
+                      📍 <span className="font-semibold">Pickup:</span>{" "}
+                      {request.pickup}
+                    </p>
+                  )}
+
+                  {request.destination && (
+                    <p className="text-white/80">
+                      🎯 <span className="font-semibold">Destination:</span>{" "}
+                      {request.destination}
+                    </p>
+                  )}
+
+                  {request.items && (
+                    <p className="text-white/80">
+                      📝 <span className="font-semibold">Details:</span>{" "}
+                      {request.items}
+                    </p>
+                  )}
+                </div>
+
+                <div className="mt-5 grid grid-cols-2 gap-3">
+                  <button
+                    onClick={() => updateStatus(request.id, "accepted")}
+                    className="rounded-2xl bg-blue-600 py-4 font-bold text-white transition hover:bg-blue-500"
+                  >
+                    Accept
+                  </button>
+
+                  <button
+                    onClick={() => updateStatus(request.id, "done")}
+                    className="rounded-2xl bg-green-600 py-4 font-bold text-white transition hover:bg-green-500"
+                  >
+                    Done
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
       </div>
     </main>
   );
