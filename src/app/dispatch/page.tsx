@@ -19,11 +19,16 @@ type Request = {
   assigned_to?: string | null;
 };
 
+const PRICING: Record<string, number> = {
+  water_taxi: 75,
+  boat_delivery: 25,
+  captain_request: 150,
+};
+
 export default function Dispatch() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [filter, setFilter] = useState("all");
 
-  // 🔊 ALERT SOUND
   const playSound = () => {
     const audio = new Audio("/alert.mp3");
     audio.play().catch(() => {});
@@ -36,7 +41,7 @@ export default function Dispatch() {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.log("FETCH ERROR:", error);
+      console.log(error);
       return;
     }
 
@@ -64,15 +69,7 @@ export default function Dispatch() {
   }, []);
 
   const updateStatus = async (id: string, status: string) => {
-    const { error } = await supabase
-      .from("requests")
-      .update({ status })
-      .eq("id", id);
-
-    if (error) {
-      console.log("STATUS ERROR:", error);
-      return;
-    }
+    await supabase.from("requests").update({ status }).eq("id", id);
 
     setRequests((prev) =>
       prev.map((r) => (r.id === id ? { ...r, status } : r))
@@ -83,19 +80,16 @@ export default function Dispatch() {
     const name = prompt("Assign to (driver name):");
     if (!name) return;
 
-    const { error } = await supabase
-      .from("requests")
-      .update({ assigned_to: name })
-      .eq("id", id);
-
-    if (error) {
-      console.log("ASSIGN ERROR:", error);
-      return;
-    }
+    await supabase.from("requests").update({ assigned_to: name }).eq("id", id);
 
     setRequests((prev) =>
       prev.map((r) => (r.id === id ? { ...r, assigned_to: name } : r))
     );
+  };
+
+  const getPrice = (type: string | null) => {
+    if (!type) return 0;
+    return PRICING[type] || 0;
   };
 
   const filtered = requests.filter((r) => {
@@ -103,12 +97,25 @@ export default function Dispatch() {
     return r.type === filter;
   });
 
+  const totalRevenue = requests.reduce((sum, r) => {
+    return sum + getPrice(r.type);
+  }, 0);
+
   return (
     <main className="min-h-screen bg-slate-950 text-white p-6">
 
       {/* HEADER */}
-      <h1 className="text-3xl font-bold">📡 Dispatch Center</h1>
+      <h1 className="text-3xl font-bold">💰 Money Mode Dispatch</h1>
 
+      {/* REVENUE BAR */}
+      <div className="mt-3 p-3 bg-green-500/10 border border-green-400/20 rounded-xl">
+        <div className="text-sm text-white/60">Estimated Revenue</div>
+        <div className="text-2xl font-bold text-green-400">
+          ${totalRevenue}
+        </div>
+      </div>
+
+      {/* COUNTERS */}
       <div className="mt-2 text-sm text-white/60">
         🚤 Rides: {requests.filter(r => r.type === "water_taxi").length} •{" "}
         📦 Deliveries: {requests.filter(r => r.type === "boat_delivery").length} •{" "}
@@ -147,11 +154,12 @@ export default function Dispatch() {
         {filtered.map((req) => {
           const status = req.status || "new";
           const type = (req.type || "unknown").replaceAll("_", " ");
+          const price = getPrice(req.type);
 
           return (
             <div
               key={req.id}
-              className={`border rounded-xl p-4 transition ${
+              className={`border rounded-xl p-4 ${
                 status === "new"
                   ? "bg-yellow-500/10 border-yellow-400/30"
                   : status === "accepted"
@@ -162,7 +170,9 @@ export default function Dispatch() {
 
               {/* TOP */}
               <div className="flex justify-between items-center">
-                <div className="font-bold capitalize">{type}</div>
+                <div className="font-bold capitalize">
+                  {type} <span className="text-green-400">(${price})</span>
+                </div>
 
                 <div className="text-xs text-white/50">
                   {new Date(req.created_at).toLocaleTimeString()}
