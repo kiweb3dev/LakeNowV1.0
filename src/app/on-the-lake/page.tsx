@@ -6,73 +6,62 @@ export default function OnTheLake() {
   const router = useRouter();
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white flex flex-col">
+    <main className="min-h-screen bg-black text-white flex flex-col items-center p-6">
 
       {/* HEADER */}
-      <div className="px-6 pt-10 pb-6 text-center">
-        <div className="text-5xl mb-3">🌊</div>
+      <h1 className="text-3xl font-bold mt-6 text-center">
+        🚤 On The Lake
+      </h1>
 
-        <h1 className="text-4xl font-black">
-          On the Lake
-        </h1>
-
-        <p className="mt-2 text-white/60">
-          Water transportation & lake services
-        </p>
-      </div>
-
-      {/* CORE QUESTION */}
-      <div className="px-6 text-center">
-        <h2 className="text-xl font-semibold">
-          What do you need?
-        </h2>
-        <p className="text-sm text-white/50 mt-1">
-          Fast dispatch. Lake of the Ozarks.
-        </p>
-      </div>
+      <p className="text-white/60 text-sm text-center mt-2 max-w-md">
+        Water-based transportation services across Lake of the Ozarks.
+      </p>
 
       {/* OPTIONS */}
-      <div className="px-6 mt-8 space-y-4 max-w-md mx-auto w-full">
+      <div className="w-full max-w-sm mt-10 space-y-4">
 
         {/* WATER TAXI */}
         <button
           onClick={() => router.push("/on-the-lake/water-taxi")}
-          className="w-full rounded-3xl bg-teal-600/90 p-6 text-left hover:bg-teal-500 transition shadow-lg"
+          className="w-full py-5 rounded-2xl bg-blue-600 text-white font-bold text-lg"
         >
-          <div className="text-2xl font-bold">🚤 Water Taxi</div>
-          <div className="text-sm text-white/80 mt-1">
-            Dock-to-dock transportation
+          🚤 Water Taxi
+          <div className="text-xs font-normal mt-1 text-white/80">
+            Dock-to-dock passenger rides
           </div>
         </button>
 
         {/* BOAT DELIVERY */}
         <button
-          onClick={() => router.push("/on-the-lake/delivery")}
-          className="w-full rounded-3xl bg-orange-600/90 p-6 text-left hover:bg-orange-500 transition shadow-lg"
+          onClick={() => router.push("/on-the-lake/boat-delivery")}
+          className="w-full py-5 rounded-2xl bg-green-600 text-white font-bold text-lg"
         >
-          <div className="text-2xl font-bold">📦 Boat Delivery</div>
-          <div className="text-sm text-white/80 mt-1">
-            Food, ice, drinks & supplies to your boat
+          📦 Boat Delivery
+          <div className="text-xs font-normal mt-1 text-white/80">
+            We deliver items by boat
           </div>
         </button>
 
-        {/* CAPTAIN MY BOAT */}
+        {/* CAPTAIN SERVICE */}
         <button
           onClick={() => router.push("/on-the-lake/captain")}
-          className="w-full rounded-3xl bg-green-600/90 p-6 text-left hover:bg-green-500 transition shadow-lg"
+          className="w-full py-5 rounded-2xl bg-purple-600 text-white font-bold text-lg"
         >
-          <div className="text-2xl font-bold">🛥 Captain My Boat</div>
-          <div className="text-sm text-white/80 mt-1">
-            We operate your boat safely for you
+          🛥 Captain My Boat
+          <div className="text-xs font-normal mt-1 text-white/80">
+            We operate your boat for you
           </div>
         </button>
 
       </div>
 
-      {/* TRUST BAR */}
-      <div className="mt-auto border-t border-white/10 py-6 text-center text-xs text-white/50">
-        ✓ Licensed Operators • ✓ Real-Time Dispatch • ✓ Lake of the Ozarks
-      </div>
+      {/* BACK */}
+      <button
+        onClick={() => router.push("/")}
+        className="mt-10 text-white/40 text-sm"
+      >
+        ← Back to Home
+      </button>
 
     </main>
   );

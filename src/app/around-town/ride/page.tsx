@@ -1,69 +1,129 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
-export default function Page() {
+export default function RidePage() {
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+
   const [form, setForm] = useState({
-    customer_name: "",
+    name: "",
     phone: "",
     pickup: "",
     destination: "",
-    passengers: "",
-    notes: "",
   });
 
-  const update = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const submit = async () => {
-    if (!form.customer_name || !form.phone || !form.pickup) {
-      alert("Missing required fields");
+  async function submitRequest() {
+    if (
+      !form.phone.trim() ||
+      !form.pickup.trim() ||
+      !form.destination.trim()
+    ) {
+      alert("Please complete all required fields.");
       return;
     }
 
+    setLoading(true);
+
     const { error } = await supabase.from("requests").insert([
       {
-        ...form,
-        service_type: "ride",
-        transport_mode: "town",
-        status: "new",
+        type: "ride",
+        name: form.name,
+        phone: form.phone,
+        pickup: form.pickup,
+        destination: form.destination,
+        status: "pending",
+        created_at: new Date().toISOString(),
       },
     ]);
 
-if (error) {
-  console.log("SUPABASE ERROR:", error);
-  alert(error.message);
-  return;
-}
+    setLoading(false);
 
-    alert("Ride request sent 🚗");
+    if (error) {
+      alert(error.message);
+      return;
+    }
 
-    setForm({
-      customer_name: "",
-      phone: "",
-      pickup: "",
-      destination: "",
-      passengers: "",
-      notes: "",
-    });
-  };
+    router.push("/request-received");
+  }
 
   return (
-    <main className="p-6 space-y-3">
-      <h1 className="text-xl font-bold">Ride Request</h1>
+    <main className="min-h-screen bg-black text-white p-6 flex flex-col items-center">
 
-      <input name="customer_name" placeholder="Name" onChange={update} value={form.customer_name} />
-      <input name="phone" placeholder="Phone" onChange={update} value={form.phone} />
-      <input name="pickup" placeholder="Pickup" onChange={update} value={form.pickup} />
-      <input name="destination" placeholder="Destination" onChange={update} value={form.destination} />
-      <input name="passengers" placeholder="Passengers" onChange={update} value={form.passengers} />
-      <textarea name="notes" placeholder="Notes" onChange={update} value={form.notes} />
+      <div className="w-full max-w-md">
 
-      <button onClick={submit} className="bg-blue-600 text-white px-4 py-2 rounded">
-        Submit Ride Request
-      </button>
+        <h1 className="text-3xl font-bold text-center">
+          🚗 Get a Ride
+        </h1>
+
+        <p className="text-center text-white/60 mt-2 mb-8">
+          Need a ride around Lake of the Ozarks?
+          We'll get you there.
+        </p>
+
+        <div className="space-y-4">
+
+          <input
+            placeholder="Your Name (optional)"
+            value={form.name}
+            onChange={(e) =>
+              setForm({ ...form, name: e.target.value })
+            }
+            className="w-full rounded-xl bg-white/10 p-4 text-white placeholder:text-white/40 border border-white/20"
+          />
+
+          <input
+            placeholder="Phone Number *"
+            value={form.phone}
+            onChange={(e) =>
+              setForm({ ...form, phone: e.target.value })
+            }
+            className="w-full rounded-xl bg-white/10 p-4 text-white placeholder:text-white/40 border border-white/20"
+          />
+
+          <input
+            placeholder="Pickup Location *"
+            value={form.pickup}
+            onChange={(e) =>
+              setForm({ ...form, pickup: e.target.value })
+            }
+            className="w-full rounded-xl bg-white/10 p-4 text-white placeholder:text-white/40 border border-white/20"
+          />
+
+          <input
+            placeholder="Destination *"
+            value={form.destination}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                destination: e.target.value,
+              })
+            }
+            className="w-full rounded-xl bg-white/10 p-4 text-white placeholder:text-white/40 border border-white/20"
+          />
+
+        </div>
+
+        <button
+          onClick={submitRequest}
+          disabled={loading}
+          className="w-full mt-8 rounded-xl bg-green-600 py-4 text-lg font-bold hover:bg-green-500 transition disabled:opacity-50"
+        >
+          {loading ? "Submitting..." : "Request My Ride"}
+        </button>
+
+        <button
+          onClick={() => router.back()}
+          className="w-full mt-4 rounded-xl border border-white/20 py-4 text-white/70 hover:bg-white/10"
+        >
+          Back
+        </button>
+
+      </div>
+
     </main>
   );
 }
