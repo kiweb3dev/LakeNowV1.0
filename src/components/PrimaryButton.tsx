@@ -1,10 +1,9 @@
 "use client";
 
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 
-interface PrimaryButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
+interface PrimaryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
 }
 
 export default function PrimaryButton({
@@ -16,21 +15,14 @@ export default function PrimaryButton({
     <button
       {...props}
       className={`
-        w-full
-        rounded-3xl
-        bg-blue-600
-        py-5
-        px-6
-        text-lg
-        font-bold
-        text-white
-        transition-all
-        duration-200
-        hover:bg-blue-500
-        active:scale-[0.98]
-        disabled:opacity-50
-        disabled:cursor-not-allowed
-        shadow-lg
+        w-full rounded-2xl
+        bg-gradient-to-r from-blue-700 to-blue-500
+        px-6 py-4
+        text-base font-bold text-white
+        shadow-lg shadow-blue-950/40
+        transition active:scale-[0.98]
+        hover:from-blue-600 hover:to-blue-400
+        disabled:cursor-not-allowed disabled:opacity-50
         ${className}
       `}
     >

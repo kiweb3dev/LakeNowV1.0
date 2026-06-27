@@ -11,52 +11,35 @@ export default function OnTheLakePage() {
 
   return (
     <PageContainer>
-
-      {/* Logo */}
-
       <Logo size={70} />
 
-      {/* Header */}
-
       <div className="mt-10 text-center">
-
-        <h2 className="text-3xl font-bold">
-          🚤 On The Lake
-        </h2>
+        <h2 className="text-3xl font-bold">🚤 On The Lake</h2>
 
         <p className="mt-3 text-white/60">
-          Water transportation and boating services at Lake of the Ozarks.
+          Everything you need while you’re enjoying the lake.
         </p>
-
       </div>
 
-      {/* Services */}
-
       <div className="mt-10 flex-1 space-y-5">
-
-        <PrimaryButton
-          onClick={() => router.push("/on-the-lake/water-taxi")}
-        >
+        <PrimaryButton onClick={() => router.push("/on-the-lake/water-taxi")}>
           🚤 Water Taxi
         </PrimaryButton>
 
         <PrimaryButton
           onClick={() => router.push("/on-the-lake/boat-delivery")}
-          className="bg-white/10 border border-white/20 hover:bg-white/20"
+          className="border border-white/20 bg-white/10 hover:bg-white/20"
         >
           📦 Boat Delivery
         </PrimaryButton>
 
         <PrimaryButton
           onClick={() => router.push("/on-the-lake/captain")}
-          className="bg-white/10 border border-white/20 hover:bg-white/20"
+          className="border border-white/20 bg-white/10 hover:bg-white/20"
         >
           🛥 Captain My Boat
         </PrimaryButton>
-
       </div>
-
-      {/* Back */}
 
       <button
         onClick={() => router.back()}
@@ -64,7 +47,6 @@ export default function OnTheLakePage() {
       >
         ← Back
       </button>
-
     </PageContainer>
   );
 }

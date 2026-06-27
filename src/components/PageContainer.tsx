@@ -2,22 +2,12 @@
 
 import { ReactNode } from "react";
 
-interface PageContainerProps {
-  children: ReactNode;
-}
-
-export default function PageContainer({
-  children,
-}: PageContainerProps) {
+export default function PageContainer({ children }: { children: ReactNode }) {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-
-      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col px-6 py-8">
-
+    <main className="min-h-screen bg-[#0A0F1A] text-white">
+      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-7">
         {children}
-
       </div>
-
     </main>
   );
 }

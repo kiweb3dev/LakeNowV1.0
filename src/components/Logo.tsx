@@ -4,29 +4,20 @@ import Image from "next/image";
 
 interface LogoProps {
   size?: number;
+  className?: string;
 }
 
-export default function Logo({ size = 90 }: LogoProps) {
+export default function Logo({ size = 82, className = "" }: LogoProps) {
   return (
-    <div className="flex flex-col items-center">
-
-      {/* Temporary Logo */}
+    <div className={`flex justify-center ${className}`}>
       <Image
-        src="/logo-temp.png"
+        src="/logo.svg"
         alt="LakeNow"
-        width={size}
+        width={size * 3.8}
         height={size}
         priority
+        className="h-auto w-auto select-none"
       />
-
-      <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-white">
-        LakeNow
-      </h1>
-
-      <p className="mt-1 text-white/60 tracking-[0.25em] uppercase text-sm text-center">
-        Rides • Deliveries • On The Lake
-      </p>
-
     </div>
   );
 }
