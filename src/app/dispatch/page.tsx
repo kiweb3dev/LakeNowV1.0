@@ -7,25 +7,22 @@ type Request = {
   id: string;
   type: string | null;
   phone: string;
-  name?: string;
   location?: string;
   pickup?: string;
   destination?: string;
-  items?: string;
-  duration?: string;
   notes?: string;
   created_at: string;
   status?: string | null;
   assigned_to?: string | null;
 };
 
-const PRICING: Record<string, number> = {
+const PRICE_MAP: Record<string, number> = {
   water_taxi: 75,
   boat_delivery: 25,
   captain_request: 150,
 };
 
-export default function Dispatch() {
+export default function DispatchMobile() {
   const [requests, setRequests] = useState<Request[]>([]);
   const [filter, setFilter] = useState("all");
 
@@ -35,15 +32,10 @@ export default function Dispatch() {
   };
 
   const fetchRequests = async () => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("requests")
       .select("*")
       .order("created_at", { ascending: false });
-
-    if (error) {
-      console.log(error);
-      return;
-    }
 
     setRequests(data || []);
   };
@@ -52,7 +44,7 @@ export default function Dispatch() {
     fetchRequests();
 
     const channel = supabase
-      .channel("realtime-requests")
+      .channel("mobile-ops")
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "requests" },
@@ -76,8 +68,8 @@ export default function Dispatch() {
     );
   };
 
-  const assignJob = async (id: string) => {
-    const name = prompt("Assign to (driver name):");
+  const assign = async (id: string) => {
+    const name = prompt("Assign to:");
     if (!name) return;
 
     await supabase.from("requests").update({ assigned_to: name }).eq("id", id);
@@ -89,7 +81,7 @@ export default function Dispatch() {
 
   const getPrice = (type: string | null) => {
     if (!type) return 0;
-    return PRICING[type] || 0;
+    return PRICE_MAP[type] || 0;
   };
 
   const filtered = requests.filter((r) => {
@@ -98,42 +90,34 @@ export default function Dispatch() {
   });
 
   const totalRevenue = requests.reduce((sum, r) => {
+    if (r.status !== "accepted" && r.status !== "done") return sum;
     return sum + getPrice(r.type);
   }, 0);
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white p-6">
+    <main className="min-h-screen bg-black text-white p-3">
 
-      {/* HEADER */}
-      <h1 className="text-3xl font-bold">💰 Money Mode Dispatch</h1>
+      {/* HEADER (MOBILE SAFE) */}
+      <div className="sticky top-0 bg-black py-2 z-10 border-b border-white/10">
+        <h1 className="text-xl font-bold">📱 LakeNow Ops</h1>
 
-      {/* REVENUE BAR */}
-      <div className="mt-3 p-3 bg-green-500/10 border border-green-400/20 rounded-xl">
-        <div className="text-sm text-white/60">Estimated Revenue</div>
-        <div className="text-2xl font-bold text-green-400">
-          ${totalRevenue}
+        <div className="text-green-400 font-bold text-sm">
+          💰 ${totalRevenue} earned
         </div>
       </div>
 
-      {/* COUNTERS */}
-      <div className="mt-2 text-sm text-white/60">
-        🚤 Rides: {requests.filter(r => r.type === "water_taxi").length} •{" "}
-        📦 Deliveries: {requests.filter(r => r.type === "boat_delivery").length} •{" "}
-        🛥 Captains: {requests.filter(r => r.type === "captain_request").length}
-      </div>
-
-      {/* FILTERS */}
-      <div className="flex gap-2 mt-4 flex-wrap">
+      {/* FILTER ROW (BIG TOUCH BUTTONS) */}
+      <div className="grid grid-cols-2 gap-2 mt-3">
         {[
-          { key: "all", label: "All" },
-          { key: "water_taxi", label: "🚤 Ride" },
-          { key: "boat_delivery", label: "📦 Delivery" },
-          { key: "captain_request", label: "🛥 Captain" },
+          { key: "all", label: "ALL" },
+          { key: "water_taxi", label: "🚤 RIDE" },
+          { key: "boat_delivery", label: "📦 DROP" },
+          { key: "captain_request", label: "🛥 CAPT" },
         ].map((f) => (
           <button
             key={f.key}
             onClick={() => setFilter(f.key)}
-            className={`px-3 py-1 rounded-full text-sm ${
+            className={`py-3 rounded-xl text-sm font-bold ${
               filter === f.key
                 ? "bg-white text-black"
                 : "bg-white/10 text-white"
@@ -144,85 +128,74 @@ export default function Dispatch() {
         ))}
       </div>
 
-      {/* LIST */}
-      <div className="mt-6 space-y-4">
+      {/* CARDS */}
+      <div className="mt-4 space-y-3">
 
         {filtered.length === 0 && (
-          <p className="text-white/50">No requests yet.</p>
+          <div className="text-white/50 text-sm">No jobs</div>
         )}
 
         {filtered.map((req) => {
-          const status = req.status || "new";
-          const type = (req.type || "unknown").replaceAll("_", " ");
           const price = getPrice(req.type);
+          const status = req.status || "new";
 
           return (
             <div
               key={req.id}
-              className={`border rounded-xl p-4 ${
+              className={`p-3 rounded-xl border ${
                 status === "new"
-                  ? "bg-yellow-500/10 border-yellow-400/30"
+                  ? "border-yellow-400/40 bg-yellow-500/10"
                   : status === "accepted"
-                  ? "bg-blue-500/10 border-blue-400/30"
-                  : "bg-green-500/10 border-green-400/30"
+                  ? "border-blue-400/40 bg-blue-500/10"
+                  : "border-green-400/40 bg-green-500/10"
               }`}
             >
 
               {/* TOP */}
               <div className="flex justify-between items-center">
-                <div className="font-bold capitalize">
-                  {type} <span className="text-green-400">(${price})</span>
+                <div className="font-bold text-sm">
+                  {(req.type || "unknown").replaceAll("_", " ")}
                 </div>
 
-                <div className="text-xs text-white/50">
-                  {new Date(req.created_at).toLocaleTimeString()}
+                <div className="text-green-400 font-bold text-sm">
+                  ${price}
                 </div>
-              </div>
-
-              {/* STATUS */}
-              <div className="mt-2">
-                <span className="text-xs px-2 py-1 rounded-full bg-white/10">
-                  {status}
-                </span>
               </div>
 
               {/* DETAILS */}
-              <div className="mt-3 text-sm space-y-1 text-white/80">
+              <div className="text-xs text-white/70 mt-2 space-y-1">
                 <div>📞 {req.phone}</div>
                 {req.location && <div>📍 {req.location}</div>}
-                {req.pickup && <div>🚤 Pickup: {req.pickup}</div>}
-                {req.destination && <div>🎯 Dropoff: {req.destination}</div>}
-                {req.items && <div>📦 Items: {req.items}</div>}
-                {req.duration && <div>⏱ Duration: {req.duration}</div>}
-                {req.notes && <div>📝 {req.notes}</div>}
+                {req.pickup && <div>🚤 {req.pickup}</div>}
+                {req.destination && <div>🎯 {req.destination}</div>}
                 {req.assigned_to && (
                   <div className="text-purple-300">
-                    👤 Assigned: {req.assigned_to}
+                    👤 {req.assigned_to}
                   </div>
                 )}
               </div>
 
-              {/* ACTIONS */}
-              <div className="flex gap-2 mt-4">
+              {/* ACTIONS (BIG MOBILE BUTTONS) */}
+              <div className="grid grid-cols-3 gap-2 mt-3">
                 <button
                   onClick={() => updateStatus(req.id, "accepted")}
-                  className="px-3 py-1 bg-blue-600 rounded text-sm"
+                  className="py-3 bg-blue-600 rounded-lg text-xs font-bold"
                 >
-                  Accept
+                  ACCEPT
                 </button>
 
                 <button
                   onClick={() => updateStatus(req.id, "done")}
-                  className="px-3 py-1 bg-green-600 rounded text-sm"
+                  className="py-3 bg-green-600 rounded-lg text-xs font-bold"
                 >
-                  Done
+                  DONE
                 </button>
 
                 <button
-                  onClick={() => assignJob(req.id)}
-                  className="px-3 py-1 bg-purple-600 rounded text-sm"
+                  onClick={() => assign(req.id)}
+                  className="py-3 bg-purple-600 rounded-lg text-xs font-bold"
                 >
-                  Assign
+                  ASSIGN
                 </button>
               </div>
 
