@@ -1,38 +1,62 @@
-"use client";
-
-import { useRouter } from "next/navigation";
-import Hero from "@/components/layout/Hero";
-import PageHeader from "@/components/layout/PageHeader";
-import LocationCard from "@/components/cards/LocationCard";
+import Hero from "@/components/Hero";
+import ServiceCard from "@/components/ServiceCard";
 
 export default function Home() {
-  const router = useRouter();
-
   return (
-    <main className="min-h-screen bg-slate-50">
-      <PageHeader />
+    <main className="min-h-screen bg-slate-100">
+      <Hero
+        title="LakeNow"
+        subtitle="Ride • Deliver • Captain"
+        tagline="Around Town. On the Lake. On Your Schedule."
+      />
 
-      <Hero />
+      <section className="mx-auto max-w-6xl px-6 py-12">
+        <h2 className="mb-8 text-center text-3xl font-bold">
+          What do you need today?
+        </h2>
 
-      <div className="px-6 pb-10 max-w-md mx-auto">
-        <p className="text-xs uppercase tracking-widest text-slate-400 mb-3">
-          Where are you now?
-        </p>
+        <div className="grid gap-6 md:grid-cols-2">
+          <ServiceCard
+            icon="🚗"
+            title="Get a Ride"
+            slogan="Your Destination. Our Driver."
+            description="Safe transportation to bars, restaurants, hotels, vacation rentals, marinas, and home."
+            href="/around-town/ride"
+            color="blue"
+            button="Request Ride"
+          />
 
-        <LocationCard
-          icon="🏙️"
-          title="Around Town"
-          subtitle="Rides • Deliveries"
-          onClick={() => router.push("/around-town")}
-        />
+          <ServiceCard
+            icon="🚤"
+            title="Water Taxi"
+            slogan="Your Dock. Our Boat."
+            description="Fast dock-to-dock transportation across Lake of the Ozarks."
+            href="/on-the-lake/water-taxi"
+            color="teal"
+            button="Request Water Taxi"
+          />
 
-        <LocationCard
-          icon="🚤"
-          title="On the Lake"
-          subtitle="Water Taxi • Deliveries • Captain"
-          onClick={() => router.push("/on-the-lake")}
-        />
-      </div>
+          <ServiceCard
+            icon="📦"
+            title="Delivery"
+            slogan="Your Order. Delivered."
+            description="Food, drinks, groceries, ice, and supplies delivered around town or directly to your dock."
+            href="/delivery"
+            color="orange"
+            button="Request Delivery"
+          />
+
+          <ServiceCard
+            icon="🛥️"
+            title="Captain My Boat"
+            slogan="Your Boat. Our Captain."
+            description="Need someone to operate your boat? We'll drive your boat so everyone gets where they need to go safely."
+            href="/on-the-lake/captain"
+            color="green"
+            button="Request Captain"
+          />
+        </div>
+      </section>
     </main>
   );
 }
