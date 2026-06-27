@@ -11,7 +11,7 @@ export default function Logo({ size = 82, className = "" }: LogoProps) {
   return (
     <div className={`flex justify-center ${className}`}>
       <Image
-        src="/logo.svg"
+        src="/logo.png"
         alt="LakeNow"
         width={size * 3.8}
         height={size}
