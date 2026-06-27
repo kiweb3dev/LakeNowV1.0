@@ -21,7 +21,7 @@ export default function AdminPage() {
 
   const fetchRides = async () => {
     const { data, error } = await supabase
-      .from("ride_requests")
+      .from("requests")
       .select("*")
       .order("created_at", { ascending: false });
 
@@ -44,7 +44,7 @@ export default function AdminPage() {
 
   const updateStatus = async (id: string, status: string) => {
     await supabase
-      .from("ride_requests")
+      .from("requests")
       .update({ status })
       .eq("id", id);
 

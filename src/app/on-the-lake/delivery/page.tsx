@@ -3,54 +3,54 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function CaptainMyBoat() {
+export default function BoatDelivery() {
   const [form, setForm] = useState({
     name: "",
     phone: "",
     location: "",
-    boatType: "",
-    duration: "",
+    items: "",
     notes: "",
   });
 
   const update = (e: any) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const submit = async () => {
-    if (!form.phone || !form.location) {
-      alert("Please enter location and phone");
+    if (!form.phone || !form.location || !form.items) {
+      alert("Please fill in location, items, and phone");
       return;
     }
 
     const { error } = await supabase.from("requests").insert([
-{
-  name: form.name,
-  phone: form.phone,
-  location: form.location,
-  boatType: form.boatType,
-  duration: form.duration,
-  notes: form.notes,
+      {
+        name: form.name,
+        phone: form.phone,
+        location: form.location,
+        items: form.items,
+        notes: form.notes,
 
-  type: "captain_request",
-  created_at: new Date().toISOString(),
-},
+        type: "boat_delivery",
+        created_at: new Date().toISOString(),
+      },
     ]);
 
-    if (error) {
-      console.log(error);
-      alert("Error submitting request");
-      return;
-    }
+if (error) {
+  console.log("SUPABASE ERROR FULL:", error);
+  alert(error.message);
+  return;
+}
 
-    alert("🛥 Captain request sent! We’re assigning a driver.");
+    alert("📦 Delivery request sent! We’re on the way.");
 
     setForm({
       name: "",
       phone: "",
       location: "",
-      boatType: "",
-      duration: "",
+      items: "",
       notes: "",
     });
   };
@@ -58,58 +58,58 @@ export default function CaptainMyBoat() {
   return (
     <main className="min-h-screen bg-slate-950 text-white p-6">
 
-      <h1 className="text-3xl font-bold">🛥 Captain My Boat</h1>
+      <h1 className="text-3xl font-bold">📦 Boat Delivery</h1>
       <p className="text-white/60 mt-1">
-        Professional boat operators when you need them
+        Food, ice, drinks & supplies delivered to your boat
       </p>
 
       <div className="mt-6 space-y-3 max-w-md">
 
         <input
           name="location"
-          placeholder="Boat location (dock / cove)"
-          onChange={update}
+          placeholder="Your location (dock / cove)"
           value={form.location}
+          onChange={update}
           className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
         />
 
         <input
-          name="boatType"
-          placeholder="Boat type (optional)"
+          name="items"
+          placeholder="What do you need? (ice, food, drinks...)"
+          value={form.items}
           onChange={update}
-          value={form.boatType}
-          className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
-        />
-
-        <input
-          name="duration"
-          placeholder="How long do you need a captain?"
-          onChange={update}
-          value={form.duration}
           className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
         />
 
         <input
           name="phone"
           placeholder="Phone number"
-          onChange={update}
           value={form.phone}
+          onChange={update}
+          className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
+        />
+
+        <input
+          name="name"
+          placeholder="Name (optional)"
+          value={form.name}
+          onChange={update}
           className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
         />
 
         <textarea
           name="notes"
-          placeholder="Special instructions (optional)"
-          onChange={update}
+          placeholder="Extra notes (optional)"
           value={form.notes}
+          onChange={update}
           className="w-full p-3 rounded-xl bg-white text-black placeholder-gray-500"
         />
 
         <button
           onClick={submit}
-          className="w-full bg-green-600 text-white p-4 rounded-xl font-bold hover:bg-green-500 transition"
+          className="w-full bg-orange-600 text-white p-4 rounded-xl font-bold hover:bg-orange-500 transition"
         >
-          Request Captain
+          Request Delivery
         </button>
 
       </div>

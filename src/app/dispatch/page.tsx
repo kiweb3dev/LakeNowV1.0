@@ -1,12 +1,27 @@
 "use client";
 
-import { RealtimeChannel } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function DispatchPage() {
-  const [requests, setRequests] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+type Request = {
+  id: string;
+  type: string;
+  phone: string;
+  name?: string;
+  location?: string;
+  pickup?: string;
+  destination?: string;
+  items?: string;
+  boatType?: string;
+  duration?: string;
+  notes?: string;
+  created_at: string;
+  status?: string;
+};
+
+export default function Dispatch() {
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [filter, setFilter] = useState("all");
 
   const fetchRequests = async () => {
     const { data, error } = await supabase
@@ -14,165 +29,137 @@ export default function DispatchPage() {
       .select("*")
       .order("created_at", { ascending: false });
 
-    if (data) setRequests(data);
-    setLoading(false);
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+    setRequests(data || []);
   };
 
-useEffect(() => {
-  fetchRequests();
+  useEffect(() => {
+    fetchRequests();
 
-  const channel: RealtimeChannel = supabase
-    .channel("requests-channel")
-    .on(
-      "postgres_changes",
-      {
-        event: "*",
-        schema: "public",
-        table: "requests",
-      },
-      (payload) => {
-        console.log("REALTIME UPDATE:", payload);
-        fetchRequests();
-      }
-    )
-    .subscribe();
+    const channel = supabase
+      .channel("realtime-requests")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "requests" },
+        (payload) => {
+          setRequests((prev) => [payload.new as Request, ...prev]);
+        }
+      )
+      .subscribe();
 
-  return () => {
-    supabase.removeChannel(channel);
-  };
-}, []);
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   const updateStatus = async (id: string, status: string) => {
     await supabase.from("requests").update({ status }).eq("id", id);
-    fetchRequests();
+
+    setRequests((prev) =>
+      prev.map((r) => (r.id === id ? { ...r, status } : r))
+    );
   };
 
+  const filtered = requests.filter((r) => {
+    if (filter === "all") return true;
+    return r.type === filter;
+  });
+
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#0b1220",
-        color: "white",
-        padding: 20,
-      }}
-    >
+    <main className="min-h-screen bg-slate-950 text-white p-6">
+
       {/* HEADER */}
-      <div style={{ marginBottom: 20 }}>
-        <h1 style={{ fontSize: 28, fontWeight: "bold" }}>
-          🚤 LakeNow Dispatch Center
-        </h1>
-        <p style={{ color: "#94a3b8" }}>
-          Live operational control system
-        </p>
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold">📡 Dispatch Center</h1>
       </div>
 
-      {/* STATUS */}
-      {loading && <p style={{ color: "#94a3b8" }}>Loading requests...</p>}
+      {/* FILTERS */}
+      <div className="flex gap-2 mt-4 flex-wrap">
+        {["all", "water_taxi", "boat_delivery", "captain_request"].map(
+          (type) => (
+            <button
+              key={type}
+              onClick={() => setFilter(type)}
+              className={`px-3 py-1 rounded-full text-sm ${
+                filter === type
+                  ? "bg-white text-black"
+                  : "bg-white/10 text-white"
+              }`}
+            >
+              {type}
+            </button>
+          )
+        )}
+      </div>
 
-      {!loading && requests.length === 0 && (
-        <div
-          style={{
-            padding: 20,
-            background: "#111827",
-            borderRadius: 12,
-            color: "#94a3b8",
-          }}
-        >
-          No active requests
-        </div>
-      )}
+      {/* LIST */}
+      <div className="mt-6 space-y-4">
 
-      {/* CARDS */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        {requests.map((req) => (
+        {filtered.length === 0 && (
+          <p className="text-white/50">No requests.</p>
+        )}
+
+        {filtered.map((req) => (
           <div
             key={req.id}
-            style={{
-              background: "#111827",
-              border: "1px solid #1f2937",
-              borderRadius: 12,
-              padding: 16,
-            }}
+            className="bg-white/10 border border-white/10 rounded-xl p-4"
           >
-            {/* TOP ROW */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <div>
-                <div style={{ fontWeight: "bold", fontSize: 16 }}>
-                  {req.customer_name}
-                </div>
-                <div style={{ color: "#94a3b8", fontSize: 12 }}>
-                  {req.phone}
-                </div>
-              </div>
 
+            {/* TOP ROW */}
+            <div className="flex justify-between items-center">
+              <div className="font-bold capitalize">
+  {(req.type || "unknown").replaceAll("_", " ")}
+</div>
+
+              <div className="text-xs text-white/50">
+                {new Date(req.created_at).toLocaleTimeString()}
+              </div>
+            </div>
+
+            {/* STATUS */}
+            <div className="mt-2">
               <span
-                style={{
-                  fontSize: 12,
-                  padding: "4px 8px",
-                  borderRadius: 6,
-                  background: "#1f2937",
-                  color: "#93c5fd",
-                }}
+                className={`text-xs px-2 py-1 rounded-full ${
+                  req.status === "accepted"
+                    ? "bg-blue-500/20 text-blue-300"
+                    : req.status === "done"
+                    ? "bg-green-500/20 text-green-300"
+                    : "bg-yellow-500/20 text-yellow-300"
+                }`}
               >
-                {req.status}
+                {req.status || "new"}
               </span>
             </div>
 
             {/* DETAILS */}
-            <div style={{ marginTop: 10, fontSize: 13, color: "#cbd5e1" }}>
-              <p>📍 Pickup: {req.pickup}</p>
-              <p>🎯 Destination: {req.destination}</p>
-              <p>🚦 Service: {req.service_type}</p>
-              <p>🚤 Mode: {req.transport_mode}</p>
+            <div className="mt-3 text-sm space-y-1 text-white/80">
+              <div>📞 {req.phone}</div>
+              {req.location && <div>📍 {req.location}</div>}
+              {req.pickup && <div>🚤 Pickup: {req.pickup}</div>}
+              {req.destination && <div>🎯 Dropoff: {req.destination}</div>}
+              {req.items && <div>📦 Items: {req.items}</div>}
+              {req.duration && <div>⏱ Duration: {req.duration}</div>}
+              {req.notes && <div>📝 {req.notes}</div>}
             </div>
 
             {/* ACTIONS */}
-            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+            <div className="flex gap-2 mt-4">
               <button
-                onClick={() => updateStatus(req.id, "assigned")}
-                style={{
-                  background: "#2563eb",
-                  color: "white",
-                  padding: "6px 10px",
-                  borderRadius: 6,
-                  border: "none",
-                  cursor: "pointer",
-                }}
+                onClick={() => updateStatus(req.id, "accepted")}
+                className="px-3 py-1 bg-blue-600 rounded text-sm"
               >
                 Accept
               </button>
 
               <button
-                onClick={() => updateStatus(req.id, "en_route")}
-                style={{
-                  background: "#f59e0b",
-                  color: "black",
-                  padding: "6px 10px",
-                  borderRadius: 6,
-                  border: "none",
-                  cursor: "pointer",
-                }}
+                onClick={() => updateStatus(req.id, "done")}
+                className="px-3 py-1 bg-green-600 rounded text-sm"
               >
-                En Route
-              </button>
-
-              <button
-                onClick={() => updateStatus(req.id, "completed")}
-                style={{
-                  background: "#10b981",
-                  color: "black",
-                  padding: "6px 10px",
-                  borderRadius: 6,
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                Complete
+                Done
               </button>
             </div>
           </div>
