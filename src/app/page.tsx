@@ -13,18 +13,18 @@ export default function Home() {
   return (
     <PageContainer>
       <div className="flex flex-1 flex-col justify-center">
-        <div className="text-center">
+        <div className="text-left">
           <p className="text-sm font-black uppercase tracking-[0.28em] text-[#FFFFFF]">
             LAKENOW
           </p>
 
-          <h1 className="mt-5 text-6xl font-black leading-[0.95] tracking-tight text-[#FFFFFF]">
+          <h1 className="mt-5 text-6xl font-black leading-[0.92] tracking-tight text-[#FFFFFF]">
             Ready to
             <br />
             get moving?
           </h1>
 
-          <p className="mx-auto mt-6 max-w-sm text-lg font-semibold leading-relaxed text-[#FFFFFF]">
+          <p className="mt-6 max-w-sm text-xl font-semibold leading-relaxed text-[#FFFFFF]">
             Fast transportation & delivery at Lake of the Ozarks.
           </p>
         </div>
@@ -47,11 +47,18 @@ export default function Home() {
 
         <div className="mt-10">
           <Card>
-            <div className="flex items-center justify-center gap-3 text-[#FFFFFF]">
-              <CircleCheck size={22} strokeWidth={2.5} />
-              <div className="text-center">
-                <p className="text-sm font-black">Available Today</p>
-                <p className="text-sm font-semibold">Lake of the Ozarks</p>
+            <div className="flex items-center gap-4 text-[#FFFFFF]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#0A84FF] text-[#FFFFFF]">
+                <CircleCheck size={24} strokeWidth={2.5} />
+              </div>
+
+              <div>
+                <p className="text-lg font-black text-[#FFFFFF]">
+                  Available Today
+                </p>
+                <p className="text-base font-semibold text-[#FFFFFF]">
+                  Dispatching at Lake of the Ozarks
+                </p>
               </div>
             </div>
           </Card>

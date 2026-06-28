@@ -5,9 +5,8 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { Anchor } from "lucide-react";
 
-import Logo from "@/components/Logo";
 import PageContainer from "@/components/PageContainer";
-import PageHeader from "@/components/PageHeader";
+import FormShell from "@/components/FormShell";
 import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
 
@@ -24,7 +23,12 @@ export default function WaterTaxiPage() {
   });
 
   async function submitRequest() {
-    if (!form.name.trim() || !form.phone.trim() || !form.pickup.trim() || !form.destination.trim()) {
+    if (
+      !form.name.trim() ||
+      !form.phone.trim() ||
+      !form.pickup.trim() ||
+      !form.destination.trim()
+    ) {
       alert("Please complete all required fields.");
       return;
     }
@@ -38,7 +42,9 @@ export default function WaterTaxiPage() {
         phone: form.phone,
         pickup: form.pickup,
         destination: form.destination,
-        items: form.passengers ? `${form.passengers} passenger(s)` : "Passenger count not provided",
+        items: form.passengers
+          ? `${form.passengers} passenger(s)`
+          : "Passenger count not provided",
         status: "pending",
         created_at: new Date().toISOString(),
       },
@@ -56,34 +62,63 @@ export default function WaterTaxiPage() {
 
   return (
     <PageContainer>
-      <Logo size={58} />
-
-      <div className="mx-auto mt-8 flex h-16 w-16 items-center justify-center rounded-full border border-blue-400 bg-blue-600/30 text-blue-200 shadow-md shadow-blue-950/50">
-        <Anchor size={34} strokeWidth={2.5} />
-      </div>
-
-      <PageHeader
+      <FormShell
+        icon={<Anchor size={46} strokeWidth={2.5} />}
         title="Water Taxi"
         subtitle="Skip the driving. We’ll get you and your crew safely from dock to dock."
-      />
+      >
+        <div className="space-y-5">
+          <TextInput
+            label="Name"
+            placeholder="Your name"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
 
-      <div className="mt-8 space-y-5">
-        <TextInput label="Name" placeholder="Your name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-        <TextInput label="Phone Number" placeholder="Best number to reach you" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
-        <TextInput label="Pickup Dock" placeholder="Where should we meet you?" value={form.pickup} onChange={(e) => setForm({ ...form, pickup: e.target.value })} />
-        <TextInput label="Destination Dock" placeholder="Where are you headed?" value={form.destination} onChange={(e) => setForm({ ...form, destination: e.target.value })} />
-        <TextInput label="Passengers" placeholder="How many people?" value={form.passengers} onChange={(e) => setForm({ ...form, passengers: e.target.value })} />
-      </div>
+          <TextInput
+            label="Phone Number"
+            placeholder="Best number to reach you"
+            value={form.phone}
+            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+          />
 
-      <div className="mt-8 space-y-4">
-        <PrimaryButton onClick={submitRequest} disabled={loading}>
-          {loading ? "Sending Request..." : "Send Request"}
-        </PrimaryButton>
+          <TextInput
+            label="Pickup Dock"
+            placeholder="Where should we meet you?"
+            value={form.pickup}
+            onChange={(e) => setForm({ ...form, pickup: e.target.value })}
+          />
 
-        <button onClick={() => router.back()} className="w-full rounded-2xl border border-white/10 bg-white/[0.06] py-4 text-white transition hover:bg-white/[0.1] hover:text-blue-400">
-          Back
-        </button>
-      </div>
+          <TextInput
+            label="Destination Dock"
+            placeholder="Where are you headed?"
+            value={form.destination}
+            onChange={(e) =>
+              setForm({ ...form, destination: e.target.value })
+            }
+          />
+
+          <TextInput
+            label="Passengers"
+            placeholder="How many people?"
+            value={form.passengers}
+            onChange={(e) =>
+              setForm({ ...form, passengers: e.target.value })
+            }
+          />
+
+          <PrimaryButton onClick={submitRequest} disabled={loading}>
+            {loading ? "Sending Request..." : "Send Request"}
+          </PrimaryButton>
+
+          <button
+            onClick={() => router.back()}
+            className="w-full rounded-full border border-[#FFFFFF]/20 bg-[#071426] py-4 text-lg font-black text-[#FFFFFF] transition active:scale-[0.97]"
+          >
+            Back
+          </button>
+        </div>
+      </FormShell>
     </PageContainer>
   );
 }
