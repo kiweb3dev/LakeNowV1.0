@@ -7,7 +7,6 @@ interface ServiceCardProps {
   title: string;
   description: string;
   onClick?: () => void;
-  active?: boolean;
 }
 
 export default function ServiceCard({
@@ -15,33 +14,47 @@ export default function ServiceCard({
   title,
   description,
   onClick,
-  active = false,
 }: ServiceCardProps) {
   return (
     <button
       onClick={onClick}
-      className={`
-        group w-full rounded-[28px] border p-6 text-center text-white
-        transition-all duration-200 active:scale-[0.97]
-        ${
-          active
-            ? "border-blue-400 bg-gradient-to-b from-blue-600 to-blue-800 shadow-2xl shadow-blue-900/50"
-            : "border-white/20 bg-[#071426]/95 shadow-2xl shadow-black/45 backdrop-blur-md hover:border-blue-400 hover:bg-[#0B1B31]"
-        }
-      `}
+      className="
+        group w-full rounded-[30px]
+        border border-white/20
+        bg-white/[0.08]
+        p-7 text-white
+        shadow-2xl shadow-black/40
+        backdrop-blur-xl
+        transition-all duration-300
+        hover:-translate-y-1
+        hover:border-blue-300
+        hover:bg-white/[0.12]
+        active:scale-[0.97]
+      "
     >
-      <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full border border-blue-500/70 bg-blue-600/30 text-white shadow-lg shadow-blue-900/40 transition group-hover:scale-110 group-hover:bg-blue-600/50">
-        {icon}
-      </div>
+      <div className="flex flex-col items-center">
+        <div
+          className="
+            mb-5 flex h-20 w-20 items-center justify-center rounded-full
+            bg-gradient-to-br from-blue-400 to-blue-700
+            text-white shadow-xl shadow-blue-900/50
+            transition duration-300 group-hover:scale-110
+          "
+        >
+          {icon}
+        </div>
 
-      <h3 className="text-2xl font-black text-white">{title}</h3>
+        <h2 className="text-2xl font-black tracking-tight text-white">
+          {title}
+        </h2>
 
-      <p className="mx-auto mt-3 max-w-xs text-base leading-relaxed text-white">
-        {description}
-      </p>
+        <p className="mt-3 max-w-[270px] text-center text-base leading-7 text-white">
+          {description}
+        </p>
 
-      <div className="mt-5 text-3xl font-black text-white opacity-90 transition group-hover:translate-x-1">
-        →
+        <div className="mt-5 text-3xl font-black text-white transition-transform group-hover:translate-x-1">
+          →
+        </div>
       </div>
     </button>
   );
