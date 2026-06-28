@@ -21,26 +21,26 @@ export default function ServiceCard({
     <button
       onClick={onClick}
       className={`
-        group w-full rounded-3xl border p-6 text-center
-        transition-all duration-200 active:scale-[0.97]
+        group w-full rounded-[2rem] border p-6 text-center
+        text-white transition-all duration-200 active:scale-[0.97]
         ${
           active
-            ? "border-blue-400 bg-gradient-to-b from-blue-600 to-blue-800 shadow-lg shadow-blue-900/40"
-            : "border-white/15 bg-[#071426] shadow-lg shadow-black/30 hover:border-blue-500/70 hover:bg-[#0B1B31]"
+            ? "border-blue-300 bg-gradient-to-b from-blue-500 to-blue-800 shadow-xl shadow-blue-900/50"
+            : "border-white/15 bg-[#071426]/95 shadow-xl shadow-black/35 hover:border-blue-400 hover:bg-[#0B1B31]"
         }
       `}
     >
-      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-blue-400 bg-blue-600/30 text-blue-200 shadow-md shadow-blue-950/50 transition group-hover:scale-110 group-hover:bg-blue-600/50">
+      <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full border border-blue-300 bg-blue-500/25 text-white shadow-lg shadow-blue-950/50 transition group-hover:scale-110 group-hover:bg-blue-500/40">
         {icon}
       </div>
 
-      <h3 className="text-xl font-extrabold text-white">{title}</h3>
+      <h3 className="text-2xl font-black text-white">{title}</h3>
 
-      <p className="mx-auto mt-2 max-w-xs text-sm leading-relaxed text-white">
+      <p className="mx-auto mt-3 max-w-xs text-base leading-relaxed text-white">
         {description}
       </p>
 
-      <div className="mt-4 text-2xl text-blue-400 transition group-hover:translate-x-1">
+      <div className="mt-5 text-3xl font-black text-blue-300 transition group-hover:translate-x-1">
         →
       </div>
     </button>

@@ -13,10 +13,10 @@ export default function Logo({ size = 82, className = "" }: LogoProps) {
       <Image
         src="/logo.png"
         alt="LakeNow"
-        width={size * 3.8}
+        width={size * 3.9}
         height={size}
         priority
-        className="h-auto w-auto max-w-full object-contain mix-blend-screen"
+        className="h-auto max-w-full object-contain mix-blend-screen drop-shadow-[0_12px_30px_rgba(37,99,235,0.35)]"
       />
     </div>
   );

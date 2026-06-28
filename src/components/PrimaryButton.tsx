@@ -17,12 +17,10 @@ export default function PrimaryButton({
       className={`
         relative w-full overflow-hidden rounded-2xl
         bg-gradient-to-r from-blue-700 via-blue-600 to-blue-500
-        px-6 py-4
-        text-base font-extrabold text-white
-        shadow-lg shadow-blue-950/50
-        transition-all duration-200
-        active:scale-[0.97]
-        hover:shadow-blue-800/50
+        px-6 py-5 text-lg font-black text-white
+        shadow-xl shadow-blue-950/55
+        transition-all duration-200 active:scale-[0.97]
+        hover:from-blue-600 hover:via-blue-500 hover:to-blue-400
         disabled:cursor-not-allowed disabled:opacity-50
         ${className}
       `}

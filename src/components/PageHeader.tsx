@@ -8,11 +8,11 @@ interface PageHeaderProps {
 export default function PageHeader({ title, subtitle }: PageHeaderProps) {
   return (
     <div className="mt-8 text-center">
-      <h1 className="text-3xl font-extrabold tracking-tight text-white">
+      <h1 className="text-4xl font-black tracking-tight text-white">
         {title}
       </h1>
 
-      <p className="mx-auto mt-3 max-w-sm text-base leading-relaxed text-white">
+      <p className="mx-auto mt-4 max-w-sm text-base leading-relaxed text-white">
         {subtitle}
       </p>
     </div>
