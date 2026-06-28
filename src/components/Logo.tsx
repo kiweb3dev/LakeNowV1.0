@@ -1,23 +1,20 @@
 "use client";
 
-import Image from "next/image";
-
 interface LogoProps {
   size?: number;
   className?: string;
 }
 
-export default function Logo({ size = 82, className = "" }: LogoProps) {
+export default function Logo({ className = "" }: LogoProps) {
   return (
-    <div className={`flex justify-center ${className}`}>
-      <Image
-        src="/logo.png"
-        alt="LakeNow"
-        width={size * 3.9}
-        height={size}
-        priority
-        className="h-auto max-w-full object-contain mix-blend-screen drop-shadow-[0_12px_30px_rgba(37,99,235,0.35)]"
-      />
+    <div className={`text-center ${className}`}>
+      <div className="text-5xl font-black tracking-tight text-white drop-shadow-[0_10px_28px_rgba(37,99,235,0.55)]">
+        LAKE<span className="text-blue-400">NOW</span>
+      </div>
+
+      <div className="mt-2 text-xs font-black uppercase tracking-[0.22em] text-white">
+        Rides • Delivery • At The Lake
+      </div>
     </div>
   );
 }
