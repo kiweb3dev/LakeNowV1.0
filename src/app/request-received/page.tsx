@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { CheckCircle } from "lucide-react";
 
 import Logo from "@/components/Logo";
 import PageContainer from "@/components/PageContainer";
@@ -17,19 +18,19 @@ export default function RequestReceivedPage() {
 
         <Card>
           <div className="flex flex-col items-center text-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-green-600 text-5xl font-bold shadow-lg shadow-green-950/40">
-              ✓
+            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-green-400 bg-green-600/25 text-green-300 shadow-lg shadow-green-950/40">
+              <CheckCircle size={46} strokeWidth={2.5} />
             </div>
 
-            <h1 className="mt-7 text-4xl font-extrabold tracking-tight">
+            <h1 className="mt-7 text-4xl font-extrabold tracking-tight text-white">
               Request Received!
             </h1>
 
-            <p className="mt-4 text-lg leading-relaxed text-white/70">
+            <p className="mt-4 text-lg leading-relaxed text-white">
               Your request is on its way to our dispatch team.
             </p>
 
-            <p className="mt-3 text-white/50">
+            <p className="mt-3 text-white">
               We’ll contact you shortly to confirm the details.
             </p>
 

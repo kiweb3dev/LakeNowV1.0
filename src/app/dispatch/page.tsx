@@ -1,6 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import {
+  Car,
+  Package,
+  Anchor,
+  ShipWheel,
+  ClipboardList,
+  Phone,
+  MapPin,
+  Target,
+  FileText,
+  User,
+} from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 import Logo from "@/components/Logo";
@@ -20,13 +32,13 @@ type Request = {
   created_at: string;
 };
 
-function getServiceLabel(type: string | null) {
-  if (type === "ride") return "🚗 Ride";
-  if (type === "delivery") return "📦 Car Delivery";
-  if (type === "water_taxi") return "🚤 Water Taxi";
-  if (type === "boat_delivery") return "📦 Boat Delivery";
-  if (type === "captain_request") return "🛥 Captain My Boat";
-  return "Request";
+function getService(type: string | null) {
+  if (type === "ride") return { label: "Ride", icon: <Car size={22} /> };
+  if (type === "delivery") return { label: "Car Delivery", icon: <Package size={22} /> };
+  if (type === "water_taxi") return { label: "Water Taxi", icon: <Anchor size={22} /> };
+  if (type === "boat_delivery") return { label: "Boat Delivery", icon: <Package size={22} /> };
+  if (type === "captain_request") return { label: "Captain My Boat", icon: <ShipWheel size={22} /> };
+  return { label: "Request", icon: <ClipboardList size={22} /> };
 }
 
 export default function DispatchPage() {
@@ -93,67 +105,70 @@ export default function DispatchPage() {
       <div className="mt-6 space-y-4">
         {requests.length === 0 && (
           <Card>
-            <p className="text-center text-white/60">No requests yet.</p>
+            <p className="text-center text-white">No requests yet.</p>
           </Card>
         )}
 
         {requests.map((request) => {
           const status = request.status || "pending";
+          const service = getService(request.type);
 
           return (
             <Card key={request.id}>
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-extrabold">
-                    {getServiceLabel(request.type)}
-                  </h3>
-
-                  <p className="mt-1 text-xs text-white/45">
-                    {new Date(request.created_at).toLocaleString()}
-                  </p>
+              <div className="flex flex-col items-center text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full border border-blue-400 bg-blue-600/30 text-blue-200">
+                  {service.icon}
                 </div>
 
+                <h3 className="mt-3 text-xl font-extrabold text-white">
+                  {service.label}
+                </h3>
+
+                <p className="mt-1 text-xs text-white/70">
+                  {new Date(request.created_at).toLocaleString()}
+                </p>
+
                 <span
-                  className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${
+                  className={`mt-3 rounded-full px-3 py-1 text-xs font-bold uppercase ${
                     status === "done"
                       ? "bg-green-600 text-white"
                       : status === "accepted"
                       ? "bg-blue-600 text-white"
-                      : "bg-white/10 text-white/70"
+                      : "bg-white/10 text-white"
                   }`}
                 >
                   {status}
                 </span>
               </div>
 
-              <div className="mt-5 space-y-2 rounded-2xl bg-black/25 p-4 text-sm">
-                <p className="text-white">
-                  👤 <span className="font-semibold">Name:</span>{" "}
+              <div className="mt-5 space-y-3 rounded-2xl bg-black/25 p-4 text-sm text-white">
+                <p className="flex items-center justify-center gap-2">
+                  <User size={16} /> <span className="font-semibold">Name:</span>{" "}
                   {request.name || "No name"}
                 </p>
 
-                <p className="text-white">
-                  📞 <span className="font-semibold">Phone:</span>{" "}
+                <p className="flex items-center justify-center gap-2">
+                  <Phone size={16} /> <span className="font-semibold">Phone:</span>{" "}
                   {request.phone || "No phone"}
                 </p>
 
                 {request.pickup && (
-                  <p className="text-white/80">
-                    📍 <span className="font-semibold">Pickup:</span>{" "}
+                  <p className="flex items-center justify-center gap-2">
+                    <MapPin size={16} /> <span className="font-semibold">Pickup:</span>{" "}
                     {request.pickup}
                   </p>
                 )}
 
                 {request.destination && (
-                  <p className="text-white/80">
-                    🎯 <span className="font-semibold">Destination:</span>{" "}
+                  <p className="flex items-center justify-center gap-2">
+                    <Target size={16} /> <span className="font-semibold">Destination:</span>{" "}
                     {request.destination}
                   </p>
                 )}
 
                 {request.items && (
-                  <p className="text-white/80">
-                    📝 <span className="font-semibold">Details:</span>{" "}
+                  <p className="flex items-center justify-center gap-2">
+                    <FileText size={16} /> <span className="font-semibold">Details:</span>{" "}
                     {request.items}
                   </p>
                 )}
@@ -162,14 +177,14 @@ export default function DispatchPage() {
               <div className="mt-5 grid grid-cols-2 gap-3">
                 <button
                   onClick={() => updateStatus(request.id, "accepted")}
-                  className="rounded-2xl bg-blue-600 py-4 font-bold text-white transition active:scale-[0.98] hover:bg-blue-500"
+                  className="rounded-2xl bg-blue-600 py-4 font-bold text-white transition active:scale-[0.97] hover:bg-blue-500"
                 >
                   Accept
                 </button>
 
                 <button
                   onClick={() => updateStatus(request.id, "done")}
-                  className="rounded-2xl bg-green-600 py-4 font-bold text-white transition active:scale-[0.98] hover:bg-green-500"
+                  className="rounded-2xl bg-green-600 py-4 font-bold text-white transition active:scale-[0.97] hover:bg-green-500"
                 >
                   Done
                 </button>
