@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabase";
 
 import Logo from "@/components/Logo";
 import PageContainer from "@/components/PageContainer";
+import PageHeader from "@/components/PageHeader";
 import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
 import TextArea from "@/components/TextArea";
@@ -61,14 +62,12 @@ export default function BoatDeliveryPage() {
 
   return (
     <PageContainer>
-      <Logo size={64} />
+      <Logo size={58} />
 
-      <div className="mt-8 text-center">
-        <h2 className="text-3xl font-bold">📦 Boat Delivery</h2>
-        <p className="mt-3 text-white/60">
-          Forgot something on the water? We’ll bring it right to your dock.
-        </p>
-      </div>
+      <PageHeader
+        title="Boat Delivery"
+        subtitle="Need something brought to your dock? We’ll deliver it right to the water."
+      />
 
       <div className="mt-8 space-y-5">
         <TextInput
@@ -93,8 +92,8 @@ export default function BoatDeliveryPage() {
         />
 
         <TextInput
-          label="Deliver To"
-          placeholder="Dock, cove, marina, or boat location"
+          label="Delivery Dock / Location"
+          placeholder="Where should we bring it?"
           value={form.destination}
           onChange={(e) =>
             setForm({ ...form, destination: e.target.value })
@@ -102,7 +101,7 @@ export default function BoatDeliveryPage() {
         />
 
         <TextArea
-          label="Items"
+          label="What do you need delivered?"
           placeholder="Ice, drinks, food, supplies, etc."
           rows={4}
           value={form.items}
@@ -112,12 +111,12 @@ export default function BoatDeliveryPage() {
 
       <div className="mt-8 space-y-4">
         <PrimaryButton onClick={submitRequest} disabled={loading}>
-          {loading ? "Sending Request..." : "Request Boat Delivery"}
+          {loading ? "Sending Request..." : "Send Request"}
         </PrimaryButton>
 
         <button
           onClick={() => router.back()}
-          className="w-full rounded-3xl border border-white/15 py-4 text-white/60 transition hover:bg-white/10 hover:text-white"
+          className="w-full rounded-2xl border border-white/10 bg-white/[0.06] py-4 text-white/60 transition hover:bg-white/[0.1] hover:text-white"
         >
           Back
         </button>

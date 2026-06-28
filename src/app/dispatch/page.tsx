@@ -3,6 +3,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
+import Logo from "@/components/Logo";
+import PageContainer from "@/components/PageContainer";
+import PageHeader from "@/components/PageHeader";
+import Card from "@/components/Card";
+
 type Request = {
   id: string;
   type: string | null;
@@ -77,108 +82,102 @@ export default function DispatchPage() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-      <div className="mx-auto min-h-screen w-full max-w-md px-6 py-8">
+    <PageContainer>
+      <Logo size={56} />
 
-        <div className="text-center">
-          <h1 className="text-4xl font-extrabold">LakeNow</h1>
-          <p className="mt-1 text-sm uppercase tracking-[0.25em] text-white/50">
-            Dispatch Center
-          </p>
-        </div>
+      <PageHeader
+        title="Dispatch Center"
+        subtitle="Live LakeNow requests, ready to accept and complete."
+      />
 
-        <div className="mt-8 rounded-3xl border border-white/15 bg-white/10 p-5">
-          <h2 className="text-2xl font-bold">Live Requests</h2>
-          <p className="mt-1 text-white/60">
-            Accept and complete customer requests here.
-          </p>
-        </div>
+      <div className="mt-6 space-y-4">
+        {requests.length === 0 && (
+          <Card>
+            <p className="text-center text-white/60">No requests yet.</p>
+          </Card>
+        )}
 
-        <div className="mt-6 space-y-4">
-          {requests.length === 0 && (
-            <div className="rounded-3xl border border-white/15 bg-white/10 p-6 text-center text-white/60">
-              No requests yet.
-            </div>
-          )}
+        {requests.map((request) => {
+          const status = request.status || "pending";
 
-          {requests.map((request) => {
-            const status = request.status || "pending";
+          return (
+            <Card key={request.id}>
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-xl font-extrabold">
+                    {getServiceLabel(request.type)}
+                  </h3>
 
-            return (
-              <div
-                key={request.id}
-                className="rounded-3xl border border-white/15 bg-white/10 p-5 shadow-lg"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-xl font-bold">
-                      {getServiceLabel(request.type)}
-                    </h3>
-
-                    <p className="mt-1 text-xs text-white/50">
-                      {new Date(request.created_at).toLocaleString()}
-                    </p>
-                  </div>
-
-                  <span className="rounded-full bg-blue-600 px-3 py-1 text-xs font-bold uppercase text-white">
-                    {status}
-                  </span>
-                </div>
-
-                <div className="mt-5 space-y-2 rounded-2xl bg-black/25 p-4 text-sm">
-                  <p className="text-white">
-                    👤 <span className="font-semibold">Name:</span>{" "}
-                    {request.name || "No name"}
+                  <p className="mt-1 text-xs text-white/45">
+                    {new Date(request.created_at).toLocaleString()}
                   </p>
-
-                  <p className="text-white">
-                    📞 <span className="font-semibold">Phone:</span>{" "}
-                    {request.phone || "No phone"}
-                  </p>
-
-                  {request.pickup && (
-                    <p className="text-white/80">
-                      📍 <span className="font-semibold">Pickup:</span>{" "}
-                      {request.pickup}
-                    </p>
-                  )}
-
-                  {request.destination && (
-                    <p className="text-white/80">
-                      🎯 <span className="font-semibold">Destination:</span>{" "}
-                      {request.destination}
-                    </p>
-                  )}
-
-                  {request.items && (
-                    <p className="text-white/80">
-                      📝 <span className="font-semibold">Details:</span>{" "}
-                      {request.items}
-                    </p>
-                  )}
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 gap-3">
-                  <button
-                    onClick={() => updateStatus(request.id, "accepted")}
-                    className="rounded-2xl bg-blue-600 py-4 font-bold text-white transition hover:bg-blue-500"
-                  >
-                    Accept
-                  </button>
-
-                  <button
-                    onClick={() => updateStatus(request.id, "done")}
-                    className="rounded-2xl bg-green-600 py-4 font-bold text-white transition hover:bg-green-500"
-                  >
-                    Done
-                  </button>
-                </div>
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-bold uppercase ${
+                    status === "done"
+                      ? "bg-green-600 text-white"
+                      : status === "accepted"
+                      ? "bg-blue-600 text-white"
+                      : "bg-white/10 text-white/70"
+                  }`}
+                >
+                  {status}
+                </span>
               </div>
-            );
-          })}
-        </div>
 
+              <div className="mt-5 space-y-2 rounded-2xl bg-black/25 p-4 text-sm">
+                <p className="text-white">
+                  👤 <span className="font-semibold">Name:</span>{" "}
+                  {request.name || "No name"}
+                </p>
+
+                <p className="text-white">
+                  📞 <span className="font-semibold">Phone:</span>{" "}
+                  {request.phone || "No phone"}
+                </p>
+
+                {request.pickup && (
+                  <p className="text-white/80">
+                    📍 <span className="font-semibold">Pickup:</span>{" "}
+                    {request.pickup}
+                  </p>
+                )}
+
+                {request.destination && (
+                  <p className="text-white/80">
+                    🎯 <span className="font-semibold">Destination:</span>{" "}
+                    {request.destination}
+                  </p>
+                )}
+
+                {request.items && (
+                  <p className="text-white/80">
+                    📝 <span className="font-semibold">Details:</span>{" "}
+                    {request.items}
+                  </p>
+                )}
+              </div>
+
+              <div className="mt-5 grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => updateStatus(request.id, "accepted")}
+                  className="rounded-2xl bg-blue-600 py-4 font-bold text-white transition active:scale-[0.98] hover:bg-blue-500"
+                >
+                  Accept
+                </button>
+
+                <button
+                  onClick={() => updateStatus(request.id, "done")}
+                  className="rounded-2xl bg-green-600 py-4 font-bold text-white transition active:scale-[0.98] hover:bg-green-500"
+                >
+                  Done
+                </button>
+              </div>
+            </Card>
+          );
+        })}
       </div>
-    </main>
+    </PageContainer>
   );
 }
