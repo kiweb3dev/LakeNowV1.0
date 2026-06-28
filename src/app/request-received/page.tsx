@@ -1,14 +1,32 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Star } from "lucide-react";
 
 import PageContainer from "@/components/PageContainer";
 import PrimaryButton from "@/components/PrimaryButton";
 import Card from "@/components/Card";
+import { supabase } from "@/lib/supabase";
 
 export default function RequestReceivedPage() {
   const router = useRouter();
+  const [rating, setRating] = useState<number | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+
+  async function submitRating(value: number) {
+    setRating(value);
+
+    const { error } = await supabase.from("beta_feedback").insert([
+      {
+        rating: value,
+      },
+    ]);
+
+    if (!error) {
+      setSubmitted(true);
+    }
+  }
 
   return (
     <PageContainer>
@@ -32,6 +50,38 @@ export default function RequestReceivedPage() {
             <p className="mt-3 text-base font-semibold leading-relaxed text-[#FFFFFF]">
               We’ll contact you shortly to confirm the details.
             </p>
+
+            <div className="mt-8 w-full rounded-[24px] border border-[#FFFFFF]/20 bg-[#0D1626] p-5">
+              <p className="text-lg font-black text-[#FFFFFF]">
+                How likely are you to use LakeNow again?
+              </p>
+
+              <div className="mt-4 flex justify-center gap-2">
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <button
+                    key={value}
+                    onClick={() => submitRating(value)}
+                    className="text-[#FFFFFF] transition active:scale-[0.9]"
+                  >
+                    <Star
+                      size={34}
+                      strokeWidth={2.5}
+                      fill={
+                        rating && value <= rating
+                          ? "#19C6FF"
+                          : "transparent"
+                      }
+                    />
+                  </button>
+                ))}
+              </div>
+
+              {submitted && (
+                <p className="mt-4 text-sm font-bold text-[#FFFFFF]">
+                  Thanks — your feedback helps build LakeNow.
+                </p>
+              )}
+            </div>
 
             <div className="mt-9 w-full">
               <PrimaryButton onClick={() => router.push("/")}>

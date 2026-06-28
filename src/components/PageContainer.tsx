@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import BetaBanner from "@/components/BetaBanner";
 
 export default function PageContainer({ children }: { children: ReactNode }) {
   return (
@@ -12,6 +13,7 @@ export default function PageContainer({ children }: { children: ReactNode }) {
         className="relative mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-7"
         style={{ animation: "pageIn 150ms ease-out both" }}
       >
+        <BetaBanner />
         {children}
       </div>
 
