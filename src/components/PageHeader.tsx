@@ -12,7 +12,7 @@ export default function PageHeader({ title, subtitle }: PageHeaderProps) {
         {title}
       </h1>
 
-      <p className="mt-3 text-base leading-relaxed text-white/65">
+      <p className="mx-auto mt-3 max-w-sm text-base leading-relaxed text-white">
         {subtitle}
       </p>
     </div>

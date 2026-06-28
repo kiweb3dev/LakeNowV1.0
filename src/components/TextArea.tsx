@@ -12,19 +12,19 @@ export default function TextArea({
   ...props
 }: TextAreaProps) {
   return (
-    <div className="group">
-      <label className="mb-2 block text-sm font-bold text-white/90">
+    <div>
+      <label className="mb-2 block text-center text-sm font-bold text-white">
         {label}
       </label>
 
       <textarea
         {...props}
         className={`
-          w-full rounded-xl border border-white/10
-          bg-[#071426] px-4 py-3
-          text-base text-white placeholder:text-white/35
+          w-full rounded-2xl border border-white/15
+          bg-[#071426] px-4 py-4
+          text-center text-base text-white placeholder:text-white/60
           outline-none transition-all duration-200
-          focus:border-blue-500 focus:bg-[#0B1B31] focus:shadow-md focus:shadow-blue-950/40
+          focus:border-blue-400 focus:bg-[#0B1B31] focus:shadow-md focus:shadow-blue-950/50
           ${className}
         `}
       />

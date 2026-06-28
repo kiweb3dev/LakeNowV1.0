@@ -16,7 +16,7 @@ export default function Logo({ size = 82, className = "" }: LogoProps) {
         width={size * 3.8}
         height={size}
         priority
-        className="h-auto w-auto select-none"
+        className="h-auto w-auto max-w-full object-contain mix-blend-screen"
       />
     </div>
   );
