@@ -16,18 +16,17 @@ export default function PrimaryButton({
       {...props}
       className={`
         relative w-full overflow-hidden rounded-full
-        bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-500
-        px-7 py-5 text-lg font-black text-white
-        shadow-2xl shadow-blue-950/70
+        bg-gradient-to-r from-[#0A84FF] to-[#19C6FF]
+        px-7 py-5 text-lg font-black text-[#FFFFFF]
+        shadow-2xl shadow-[#0A84FF]/45
         transition-all duration-300
-        hover:-translate-y-0.5 hover:shadow-blue-800/60
+        hover:-translate-y-0.5
         active:scale-[0.97]
         disabled:cursor-not-allowed disabled:opacity-50
         ${className}
       `}
     >
-      <span className="relative z-10 text-white">{children}</span>
-      <span className="absolute inset-0 bg-white/10 opacity-0 transition group-hover:opacity-100" />
+      <span className="relative z-10 text-[#FFFFFF]">{children}</span>
     </button>
   );
 }
