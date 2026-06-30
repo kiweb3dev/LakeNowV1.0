@@ -5,10 +5,10 @@ export default function BetaBanner() {
     <div className="mb-5 flex items-center justify-between rounded-full border border-[#FFFFFF]/10 bg-[#071426]/90 px-4 py-3 shadow-lg shadow-black/20">
       <div>
         <p className="text-[11px] font-black uppercase tracking-[0.22em] text-[#19C6FF]">
-          Public Beta
+          LakeNow Beta
         </p>
         <p className="mt-0.5 text-xs font-semibold text-[#FFFFFF]/75">
-          Help us build the first 100.
+          100 requests = public launch.
         </p>
       </div>
 

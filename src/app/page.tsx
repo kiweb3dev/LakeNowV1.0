@@ -11,6 +11,9 @@ import {
 import PageContainer from "@/components/PageContainer";
 import { supabase } from "@/lib/supabase";
 
+const BETA_COUNTER_START_AT =
+  process.env.NEXT_PUBLIC_BETA_COUNTER_START_AT ?? "2026-06-30T05:25:08.000Z";
+
 export default function Home() {
   const router = useRouter();
   const [requestCount, setRequestCount] = useState(0);
@@ -19,7 +22,9 @@ export default function Home() {
     async function getCount() {
       const { data, error } = await supabase
         .from("requests")
-        .select("phone");
+        .select("phone")
+        .gte("created_at", BETA_COUNTER_START_AT)
+        .neq("type", "beta_feedback");
 
       if (error || !data) return;
 
@@ -54,10 +59,10 @@ export default function Home() {
 
             <div className="rounded-full border border-[#FFFFFF]/10 bg-[#071426] px-3 py-2 text-right">
               <p className="text-sm font-black text-[#FFFFFF]">
-                {requestCount}/{goal}
+                Beta
               </p>
               <p className="text-[10px] font-black uppercase tracking-[0.14em] text-[#FFFFFF]/55">
-                Testers
+                Live
               </p>
             </div>
           </div>
@@ -74,13 +79,33 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-7 rounded-full bg-[#071426] p-2">
-            <div className="h-2 overflow-hidden rounded-full bg-[#0D1626]">
+          <div className="mt-7 rounded-[26px] border border-[#FFFFFF]/10 bg-[#071426] p-5 shadow-xl shadow-black/25">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-[#19C6FF]">
+                  LakeNow Beta Requests
+                </p>
+                <p className="mt-2 text-4xl font-black leading-none text-[#FFFFFF]">
+                  {requestCount}
+                  <span className="text-xl text-[#FFFFFF]/45">/{goal}</span>
+                </p>
+              </div>
+
+              <p className="pb-1 text-right text-xs font-black uppercase tracking-[0.12em] text-[#FFFFFF]/55">
+                {percent}% complete
+              </p>
+            </div>
+
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-[#0D1626]">
               <div
                 className="h-full rounded-full bg-[#0A84FF] transition-all duration-500"
                 style={{ width: `${percent}%` }}
               />
             </div>
+
+            <p className="mt-3 text-sm font-semibold leading-relaxed text-[#FFFFFF]/70">
+              At 100 beta requests, LakeNow launches publicly.
+            </p>
           </div>
 
           <div className="mt-8 space-y-4">

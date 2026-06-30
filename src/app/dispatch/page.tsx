@@ -38,6 +38,7 @@ function getService(type: string | null) {
   if (type === "water_taxi") return { label: "Water Ride", icon: <Anchor size={22} /> };
   if (type === "boat_delivery") return { label: "Water Delivery", icon: <Package size={22} /> };
   if (type === "captain_request") return { label: "Captain Request", icon: <ShipWheel size={22} /> };
+  if (type === "beta_feedback") return { label: "Beta Feedback", icon: <FileText size={22} /> };
   return { label: "Request", icon: <ClipboardList size={22} /> };
 }
 
