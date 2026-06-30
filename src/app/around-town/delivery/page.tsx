@@ -11,6 +11,10 @@ import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
 import TextArea from "@/components/TextArea";
 
+function digitsOnly(value: string) {
+  return value.replace(/\D/g, "");
+}
+
 export default function DeliveryPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -61,16 +65,17 @@ export default function DeliveryPage() {
   }
 
   return (
-    <PageContainer>
+    <PageContainer showBeta={false}>
       <FormShell
-        icon={<Package size={46} strokeWidth={2.5} />}
+        icon={<Package size={34} strokeWidth={2.5} />}
         title="Request Delivery"
-        subtitle="Food, drinks, ice, groceries, or forgotten supplies — we’ll bring them to you."
+        subtitle="Tell us what to pick up and where to bring it."
       >
-        <div className="space-y-5">
+        <div className="space-y-4">
           <TextInput
             label="Name"
             placeholder="Your name"
+            required
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
@@ -78,13 +83,19 @@ export default function DeliveryPage() {
           <TextInput
             label="Phone Number"
             placeholder="Best number to reach you"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            required
             value={form.phone}
-            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, phone: digitsOnly(e.target.value) })
+            }
           />
 
           <TextInput
             label="Pickup Location"
             placeholder="Store, restaurant, marina, or pickup spot"
+            required
             value={form.pickup}
             onChange={(e) => setForm({ ...form, pickup: e.target.value })}
           />
@@ -92,6 +103,7 @@ export default function DeliveryPage() {
           <TextInput
             label="Delivery Location"
             placeholder="Where should we bring it?"
+            required
             value={form.destination}
             onChange={(e) =>
               setForm({ ...form, destination: e.target.value })
@@ -102,17 +114,22 @@ export default function DeliveryPage() {
             label="What do you need delivered?"
             placeholder="Ice, drinks, food, groceries, supplies, etc."
             rows={4}
+            required
             value={form.items}
             onChange={(e) => setForm({ ...form, items: e.target.value })}
           />
 
           <PrimaryButton onClick={submitRequest} disabled={loading}>
-            {loading ? "Sending Request..." : "Send Request"}
+            {loading ? "Sending..." : "Request Delivery"}
           </PrimaryButton>
+
+          <p className="text-center text-xs font-semibold leading-relaxed text-[#FFFFFF]/55">
+            Your information is safe and secure.
+          </p>
 
           <button
             onClick={() => router.back()}
-            className="w-full rounded-full border border-[#FFFFFF]/20 bg-[#071426] py-4 text-lg font-black text-[#FFFFFF] transition active:scale-[0.97]"
+            className="w-full rounded-full border border-[#FFFFFF]/10 bg-transparent py-4 text-base font-black text-[#FFFFFF]/80 transition active:scale-[0.985]"
           >
             Back
           </button>

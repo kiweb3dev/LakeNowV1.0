@@ -10,6 +10,10 @@ import FormShell from "@/components/FormShell";
 import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
 
+function digitsOnly(value: string) {
+  return value.replace(/\D/g, "");
+}
+
 export default function WaterTaxiPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -27,7 +31,8 @@ export default function WaterTaxiPage() {
       !form.name.trim() ||
       !form.phone.trim() ||
       !form.pickup.trim() ||
-      !form.destination.trim()
+      !form.destination.trim() ||
+      !form.passengers.trim()
     ) {
       alert("Please complete all required fields.");
       return;
@@ -42,9 +47,7 @@ export default function WaterTaxiPage() {
         phone: form.phone,
         pickup: form.pickup,
         destination: form.destination,
-        items: form.passengers
-          ? `${form.passengers} passenger(s)`
-          : "Passenger count not provided",
+        items: `${form.passengers} passenger(s)`,
         status: "pending",
         created_at: new Date().toISOString(),
       },
@@ -61,16 +64,17 @@ export default function WaterTaxiPage() {
   }
 
   return (
-    <PageContainer>
+    <PageContainer showBeta={false}>
       <FormShell
-        icon={<Anchor size={46} strokeWidth={2.5} />}
-        title="Water Taxi"
-        subtitle="Skip the driving. We’ll get you and your crew safely from dock to dock."
+        icon={<Anchor size={34} strokeWidth={2.5} />}
+        title="Water Ride"
+        subtitle="Tell us where to pick you up and where to go."
       >
-        <div className="space-y-5">
+        <div className="space-y-4">
           <TextInput
             label="Name"
             placeholder="Your name"
+            required
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
           />
@@ -78,13 +82,19 @@ export default function WaterTaxiPage() {
           <TextInput
             label="Phone Number"
             placeholder="Best number to reach you"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            required
             value={form.phone}
-            onChange={(e) => setForm({ ...form, phone: e.target.value })}
+            onChange={(e) =>
+              setForm({ ...form, phone: digitsOnly(e.target.value) })
+            }
           />
 
           <TextInput
             label="Pickup Dock"
             placeholder="Where should we meet you?"
+            required
             value={form.pickup}
             onChange={(e) => setForm({ ...form, pickup: e.target.value })}
           />
@@ -92,6 +102,7 @@ export default function WaterTaxiPage() {
           <TextInput
             label="Destination Dock"
             placeholder="Where are you headed?"
+            required
             value={form.destination}
             onChange={(e) =>
               setForm({ ...form, destination: e.target.value })
@@ -101,19 +112,26 @@ export default function WaterTaxiPage() {
           <TextInput
             label="Passengers"
             placeholder="How many people?"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            required
             value={form.passengers}
             onChange={(e) =>
-              setForm({ ...form, passengers: e.target.value })
+              setForm({ ...form, passengers: digitsOnly(e.target.value) })
             }
           />
 
           <PrimaryButton onClick={submitRequest} disabled={loading}>
-            {loading ? "Sending Request..." : "Send Request"}
+            {loading ? "Sending..." : "Request Ride"}
           </PrimaryButton>
+
+          <p className="text-center text-xs font-semibold leading-relaxed text-[#FFFFFF]/55">
+            Your information is safe and secure.
+          </p>
 
           <button
             onClick={() => router.back()}
-            className="w-full rounded-full border border-[#FFFFFF]/20 bg-[#071426] py-4 text-lg font-black text-[#FFFFFF] transition active:scale-[0.97]"
+            className="w-full rounded-full border border-[#FFFFFF]/10 bg-transparent py-4 text-base font-black text-[#FFFFFF]/80 transition active:scale-[0.985]"
           >
             Back
           </button>
