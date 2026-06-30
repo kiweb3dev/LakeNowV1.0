@@ -41,27 +41,31 @@ export default function BoatDeliveryPage() {
 
     setLoading(true);
 
-    const { error } = await supabase.from("requests").insert([
-      {
-        type: "boat_delivery",
-        name: form.name,
-        phone: form.phone,
-        pickup: form.pickup,
-        destination: form.destination,
-        items: form.items,
-        status: "pending",
-        created_at: new Date().toISOString(),
-      },
-    ]);
+    const { data, error } = await supabase
+      .from("requests")
+      .insert([
+        {
+          type: "boat_delivery",
+          name: form.name,
+          phone: form.phone,
+          pickup: form.pickup,
+          destination: form.destination,
+          items: form.items,
+          status: "pending",
+          created_at: new Date().toISOString(),
+        },
+      ])
+      .select("id")
+      .single();
 
     setLoading(false);
 
-    if (error) {
-      alert(error.message);
+    if (error || !data?.id) {
+      alert(error?.message || "We couldn't create your request. Please try again.");
       return;
     }
 
-    router.push("/request-received");
+    router.push(`/request-status/${data.id}`);
   }
 
   return (

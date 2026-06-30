@@ -42,6 +42,20 @@ function getService(type: string | null) {
   return { label: "Request", icon: <ClipboardList size={22} /> };
 }
 
+function formatCentralTime(value: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Chicago",
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZoneName: "short",
+  }).format(new Date(value));
+}
+
 export default function DispatchPage() {
   const [requests, setRequests] = useState<Request[]>([]);
 
@@ -125,13 +139,15 @@ export default function DispatchPage() {
                   {service.label}
                 </h3>
 
-                <p className="mt-1 text-xs text-white/70">
-                  {new Date(request.created_at).toLocaleString()}
+                <p className="mt-1 text-xs font-semibold text-white/70">
+                  {formatCentralTime(request.created_at)}
                 </p>
 
                 <span
                   className={`mt-3 rounded-full px-3 py-1 text-xs font-bold uppercase ${
-                    status === "done"
+                    status === "rejected"
+                      ? "bg-red-600 text-white"
+                      : status === "done"
                       ? "bg-green-600 text-white"
                       : status === "accepted"
                       ? "bg-blue-600 text-white"
@@ -175,19 +191,26 @@ export default function DispatchPage() {
                 )}
               </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-3">
+              <div className="mt-5 grid grid-cols-3 gap-3">
                 <button
                   onClick={() => updateStatus(request.id, "accepted")}
-                  className="rounded-2xl bg-blue-600 py-4 font-bold text-white transition active:scale-[0.97] hover:bg-blue-500"
+                  className="rounded-2xl bg-blue-600 py-4 text-sm font-bold text-white transition active:scale-[0.97] hover:bg-blue-500"
                 >
                   Accept
                 </button>
 
                 <button
                   onClick={() => updateStatus(request.id, "done")}
-                  className="rounded-2xl bg-green-600 py-4 font-bold text-white transition active:scale-[0.97] hover:bg-green-500"
+                  className="rounded-2xl bg-green-600 py-4 text-sm font-bold text-white transition active:scale-[0.97] hover:bg-green-500"
                 >
                   Done
+                </button>
+
+                <button
+                  onClick={() => updateStatus(request.id, "rejected")}
+                  className="rounded-2xl bg-red-600 py-4 text-sm font-bold text-white transition active:scale-[0.97] hover:bg-red-500"
+                >
+                  Reject
                 </button>
               </div>
             </Card>
