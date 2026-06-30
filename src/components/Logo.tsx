@@ -1,20 +1,23 @@
 "use client";
 
+import Image from "next/image";
+
 interface LogoProps {
   size?: number;
   className?: string;
 }
 
-export default function Logo({ className = "" }: LogoProps) {
-  return (
-    <div className={`text-center ${className}`}>
-      <div className="text-5xl font-black tracking-tight text-white drop-shadow-[0_10px_28px_rgba(37,99,235,0.55)]">
-        LAKE<span className="text-blue-400">NOW</span>
-      </div>
+export default function Logo({ size = 150, className = "" }: LogoProps) {
+  const height = Math.round(size * (816 / 1317));
 
-      <div className="mt-2 text-xs font-black uppercase tracking-[0.22em] text-white">
-        Rides • Delivery • At The Lake
-      </div>
-    </div>
+  return (
+    <Image
+      src="/logo-primary-transparent.png"
+      alt="LakeNow"
+      width={size}
+      height={height}
+      priority
+      className={`h-auto object-contain drop-shadow-[0_14px_30px_rgba(10,132,255,0.28)] ${className}`}
+    />
   );
 }

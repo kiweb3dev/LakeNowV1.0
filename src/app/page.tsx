@@ -6,10 +6,10 @@ import {
   Car,
   Waves,
   ArrowRight,
-  Sparkles,
 } from "lucide-react";
 
 import PageContainer from "@/components/PageContainer";
+import Logo from "@/components/Logo";
 import { supabase } from "@/lib/supabase";
 
 const BETA_COUNTER_START_AT =
@@ -45,17 +45,10 @@ export default function Home() {
     <PageContainer activeTab="home" showNav>
       <div className="flex flex-1 flex-col">
         <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.32em] text-[#FFFFFF]">
-              LAKENOW
-            </p>
-            <p className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-[#FFFFFF]/65">
-              Rides - Delivery - At The Lake
-            </p>
-          </div>
+          <Logo size={148} className="-ml-3" />
 
-          <div className="premium-card rounded-full border border-[#FFFFFF]/10 px-3 py-2 text-right shadow-lg shadow-black/20">
-            <p className="flex items-center gap-2 text-sm font-black text-[#FFFFFF]">
+          <div className="premium-card rounded-full border border-[#19C6FF]/25 px-4 py-2 text-right shadow-lg shadow-black/20">
+            <p className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.14em] text-[#FFFFFF]">
               <span className="live-dot h-2 w-2 rounded-full bg-[#19C6FF]" />
               Beta
             </p>
@@ -78,16 +71,10 @@ export default function Home() {
           <div className="flex items-end justify-between gap-4">
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#19C6FF]">
-                Founding Beta Requests
+                LakeNow Requests
               </p>
               <p className="count-pop mt-2 text-[48px] font-black leading-none text-[#FFFFFF]">
                 {requestCount}
-              </p>
-            </div>
-
-            <div className="rounded-full border border-[#19C6FF]/20 bg-[#0D1626]/80 px-3 py-2">
-              <p className="text-right text-[11px] font-black uppercase tracking-[0.12em] text-[#FFFFFF]/75">
-                Live count
               </p>
             </div>
           </div>
@@ -104,10 +91,10 @@ export default function Home() {
         <section className="mt-6 space-y-3">
           <button
             onClick={() => router.push("/around-town")}
-            className="premium-card tap-card group w-full rounded-[24px] border border-[#FFFFFF]/10 p-4 text-left shadow-xl shadow-black/25 transition-all duration-200 hover:border-[#19C6FF]/60"
+            className="interactive-card premium-card tap-card group w-full rounded-[24px] border border-[#FFFFFF]/10 p-4 text-left shadow-xl shadow-black/25 transition-all duration-200 hover:border-[#19C6FF]/60"
           >
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#0A84FF] to-[#19C6FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/30 transition group-active:scale-95">
+              <div className="float-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#0A84FF] to-[#19C6FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/30 transition group-active:scale-95">
                 <Car size={31} strokeWidth={2.5} />
               </div>
 
@@ -134,10 +121,10 @@ export default function Home() {
 
           <button
             onClick={() => router.push("/on-the-lake")}
-            className="premium-card tap-card group w-full rounded-[24px] border border-[#FFFFFF]/10 p-4 text-left shadow-xl shadow-black/25 transition-all duration-200 hover:border-[#19C6FF]/60"
+            className="interactive-card premium-card tap-card group w-full rounded-[24px] border border-[#FFFFFF]/10 p-4 text-left shadow-xl shadow-black/25 transition-all duration-200 hover:border-[#19C6FF]/60"
           >
             <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#0A84FF] to-[#19C6FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/30 transition group-active:scale-95">
+              <div className="float-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#0A84FF] to-[#19C6FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/30 transition group-active:scale-95">
                 <Waves size={31} strokeWidth={2.5} />
               </div>
 
@@ -163,30 +150,6 @@ export default function Home() {
           </button>
         </section>
 
-        <section className="premium-card mt-6 rounded-[24px] border border-[#FFFFFF]/10 p-4 shadow-xl shadow-black/25">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#0D1626] text-[#19C6FF]">
-                <Sparkles size={23} strokeWidth={2.5} />
-              </div>
-              <div>
-                <p className="text-base font-black text-[#FFFFFF]">
-                  Early Access Open
-                </p>
-                <p className="mt-1 text-sm font-semibold text-[#FFFFFF]/70">
-                  Built for Lake of the Ozarks
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 rounded-full bg-[#0D1626] px-4 py-2">
-              <span className="live-dot h-2.5 w-2.5 rounded-full bg-[#19C6FF]" />
-              <span className="text-xs font-black uppercase text-[#FFFFFF]">
-                Beta
-              </span>
-            </div>
-          </div>
-        </section>
       </div>
     </PageContainer>
   );

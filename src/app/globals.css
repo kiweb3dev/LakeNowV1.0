@@ -78,6 +78,30 @@ textarea {
   transform: scale(0.985) translateY(1px);
 }
 
+.interactive-card::after {
+  position: absolute;
+  top: 0;
+  right: -20%;
+  bottom: 0;
+  width: 48%;
+  pointer-events: none;
+  content: "";
+  background: radial-gradient(circle at center, rgba(25, 198, 255, 0.13), transparent 58%);
+  opacity: 0;
+  transition: opacity 200ms ease, transform 200ms ease;
+  transform: translateX(8px);
+}
+
+.interactive-card:hover::after,
+.interactive-card:active::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.float-icon {
+  animation: iconFloat 4.2s ease-in-out infinite;
+}
+
 .shine-button::before {
   position: absolute;
   top: 0;
@@ -143,5 +167,14 @@ textarea {
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes iconFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
   }
 }
