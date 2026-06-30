@@ -17,19 +17,21 @@ export default function FormShell({
   children,
 }: FormShellProps) {
   return (
-    <div className="flex flex-1 flex-col">
-      <div className="mx-auto mb-4 mt-2 flex h-16 w-16 items-center justify-center rounded-[22px] bg-[#0A84FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/25">
-        {icon}
-      </div>
+    <div className="flex flex-1 flex-col pt-1">
+      <div className="mb-5 flex items-center gap-4">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-[#0A84FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/25">
+          {icon}
+        </div>
 
-      <div className="mb-6 text-center">
-        <h1 className="text-[34px] font-black leading-none tracking-tight text-[#FFFFFF]">
-          {title}
-        </h1>
+        <div className="min-w-0">
+          <h1 className="text-[30px] font-black leading-none tracking-tight text-[#FFFFFF]">
+            {title}
+          </h1>
 
-        <p className="mx-auto mt-3 max-w-xs text-sm font-semibold leading-relaxed text-[#FFFFFF]/70">
-          {subtitle}
-        </p>
+          <p className="mt-2 text-sm font-semibold leading-relaxed text-[#FFFFFF]/70">
+            {subtitle}
+          </p>
+        </div>
       </div>
 
       <Card>{children}</Card>

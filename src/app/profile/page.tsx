@@ -8,22 +8,22 @@ import Card from "@/components/Card";
 export default function ProfilePage() {
   return (
     <PageContainer activeTab="profile" showNav>
-      <div className="flex flex-1 flex-col justify-center">
-        <div className="text-center">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-[22px] bg-[#0A84FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/25">
+      <div className="flex flex-1 flex-col pt-8">
+        <div>
+          <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-[#0A84FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/25">
             <Heart size={34} strokeWidth={2.5} />
           </div>
 
-          <h1 className="mt-6 text-[34px] font-black leading-none tracking-tight text-[#FFFFFF]">
+          <h1 className="mt-5 text-[38px] font-black leading-none tracking-tight text-[#FFFFFF]">
             Built for the Lake.
           </h1>
 
-          <p className="mx-auto mt-3 max-w-xs text-sm font-semibold leading-relaxed text-[#FFFFFF]/70">
+          <p className="mt-3 max-w-xs text-sm font-semibold leading-relaxed text-[#FFFFFF]/70">
             LakeNow is in public beta for Lake of the Ozarks.
           </p>
         </div>
 
-        <div className="mt-8 space-y-4">
+        <div className="mt-8 space-y-3">
           <Card>
             <div className="flex gap-4">
               <ShieldCheck

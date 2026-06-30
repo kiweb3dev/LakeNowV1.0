@@ -12,13 +12,13 @@ export default function OnTheLakePage() {
 
   return (
     <PageContainer activeTab="water" showNav>
-      <div className="flex flex-1 flex-col justify-center">
+      <div className="flex flex-1 flex-col pt-8">
         <PageHeader
           title="Water"
           subtitle="Choose a ride, delivery, or captain."
         />
 
-        <div className="mt-10 space-y-4">
+        <div className="mt-8 space-y-3">
           <ServiceCard
             icon={<Anchor size={34} strokeWidth={2.5} />}
             title="Request Ride"
@@ -40,13 +40,6 @@ export default function OnTheLakePage() {
             onClick={() => router.push("/on-the-lake/captain")}
           />
         </div>
-
-        <button
-          onClick={() => router.back()}
-          className="mt-6 w-full rounded-full border border-[#FFFFFF]/10 bg-[#071426] py-4 text-base font-black text-[#FFFFFF] transition active:scale-[0.985]"
-        >
-          Back
-        </button>
       </div>
     </PageContainer>
   );

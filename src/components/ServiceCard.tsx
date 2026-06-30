@@ -23,20 +23,20 @@ export default function ServiceCard({
         group w-full rounded-[24px]
         border border-[#FFFFFF]/10
         bg-[#071426]
-        p-5 text-[#FFFFFF]
-        shadow-xl shadow-black/25
+        p-4 text-[#FFFFFF]
+        shadow-lg shadow-black/20
         transition-all duration-150
         hover:border-[#19C6FF]/70
         active:scale-[0.985]
       "
     >
       <div className="flex items-center gap-4 text-left">
-        <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[22px] bg-[#0A84FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/25">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-[#0A84FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/25">
           {icon}
         </div>
 
         <div className="min-w-0 flex-1">
-          <h2 className="text-2xl font-black leading-tight tracking-tight text-[#FFFFFF]">
+          <h2 className="text-[22px] font-black leading-tight tracking-tight text-[#FFFFFF]">
             {title}
           </h2>
 

@@ -12,13 +12,13 @@ export default function AroundTownPage() {
 
   return (
     <PageContainer activeTab="land" showNav>
-      <div className="flex flex-1 flex-col justify-center">
+      <div className="flex flex-1 flex-col pt-8">
         <PageHeader
           title="Land"
           subtitle="Choose a ride or delivery."
         />
 
-        <div className="mt-10 space-y-4">
+        <div className="mt-8 space-y-3">
           <ServiceCard
             icon={<Car size={34} strokeWidth={2.5} />}
             title="Request Ride"
@@ -33,13 +33,6 @@ export default function AroundTownPage() {
             onClick={() => router.push("/around-town/delivery")}
           />
         </div>
-
-        <button
-          onClick={() => router.back()}
-          className="mt-6 w-full rounded-full border border-[#FFFFFF]/10 bg-[#071426] py-4 text-base font-black text-[#FFFFFF] transition active:scale-[0.985]"
-        >
-          Back
-        </button>
       </div>
     </PageContainer>
   );

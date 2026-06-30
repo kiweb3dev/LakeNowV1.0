@@ -3,6 +3,27 @@
 @tailwind utilities;
 
 body {
-  background: #020617;
+  min-height: 100dvh;
+  background: #0d1626;
   color: white;
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+input,
+textarea {
+  font-size: 16px;
 }

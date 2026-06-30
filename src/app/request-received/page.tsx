@@ -50,14 +50,14 @@ export default function RequestReceivedPage() {
 
   return (
     <PageContainer showBeta={false}>
-      <div className="flex flex-1 flex-col justify-center space-y-4">
+      <div className="flex flex-1 flex-col space-y-4 pt-3">
         <Card>
           <div className="flex flex-col items-center text-center">
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[#45C85A] text-[#FFFFFF] shadow-xl shadow-[#45C85A]/20">
-              <Check size={58} strokeWidth={3} />
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#45C85A] text-[#FFFFFF] shadow-xl shadow-[#45C85A]/20">
+              <Check size={50} strokeWidth={3} />
             </div>
 
-            <h1 className="mt-8 text-[38px] font-black leading-tight tracking-tight text-[#FFFFFF]">
+            <h1 className="mt-6 text-[36px] font-black leading-tight tracking-tight text-[#FFFFFF]">
               You're all set.
             </h1>
 
@@ -65,7 +65,7 @@ export default function RequestReceivedPage() {
               We received your request and will contact you shortly.
             </p>
 
-            <div className="mt-8 w-full rounded-[22px] border border-[#FFFFFF]/10 bg-[#0D1626] p-4 text-left">
+            <div className="mt-6 w-full rounded-[22px] border border-[#FFFFFF]/10 bg-[#0D1626] p-4 text-left">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#FFFFFF]/55">
                 Next step
               </p>
@@ -74,7 +74,7 @@ export default function RequestReceivedPage() {
               </p>
             </div>
 
-            <div className="mt-7 w-full">
+            <div className="mt-6 w-full">
               <PrimaryButton onClick={() => router.push("/")}>
                 Back to Home
               </PrimaryButton>
