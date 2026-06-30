@@ -67,34 +67,36 @@ export default function Home() {
           </p>
         </section>
 
-        <section className="premium-card mt-6 rounded-[24px] border border-[#FFFFFF]/10 p-4 shadow-xl shadow-black/25">
-          <div className="flex items-end justify-between gap-4">
+        <section className="premium-card mt-5 rounded-[22px] border border-[#FFFFFF]/10 px-4 py-3 shadow-xl shadow-black/25">
+          <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#19C6FF]">
                 LakeNow Requests
               </p>
-              <p className="count-pop mt-2 text-[48px] font-black leading-none text-[#FFFFFF]">
+              <p className="mt-1 text-xs font-semibold text-[#FFFFFF]/55">
+                Beta request count
+              </p>
+            </div>
+
+            <div className="rounded-[18px] border border-[#19C6FF]/20 bg-[#020407]/70 px-4 py-2">
+              <p className="count-pop text-[32px] font-black leading-none text-[#FFFFFF]">
                 {requestCount}
               </p>
             </div>
           </div>
 
-          <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-[#0D1626]">
+          <div className="mt-3 h-1 overflow-hidden rounded-full bg-[#020407]">
             <div className="h-full w-full rounded-full bg-gradient-to-r from-[#0A84FF] to-[#19C6FF]" />
           </div>
-
-          <p className="mt-3 text-sm font-semibold leading-relaxed text-[#FFFFFF]/70">
-            New requests from this beta link help shape what LakeNow offers next.
-          </p>
         </section>
 
-        <section className="mt-6 space-y-3">
+        <section className="mt-5 space-y-3">
           <button
             onClick={() => router.push("/around-town")}
             className="interactive-card premium-card tap-card group w-full rounded-[24px] border border-[#FFFFFF]/10 p-4 text-left shadow-xl shadow-black/25 transition-all duration-200 hover:border-[#19C6FF]/60"
           >
             <div className="flex items-center gap-4">
-              <div className="float-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#0A84FF] to-[#19C6FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/30 transition group-active:scale-95">
+              <div className="logo-action-icon float-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] text-[#FFFFFF] shadow-lg transition group-active:scale-95">
                 <Car size={31} strokeWidth={2.5} />
               </div>
 
@@ -124,7 +126,7 @@ export default function Home() {
             className="interactive-card premium-card tap-card group w-full rounded-[24px] border border-[#FFFFFF]/10 p-4 text-left shadow-xl shadow-black/25 transition-all duration-200 hover:border-[#19C6FF]/60"
           >
             <div className="flex items-center gap-4">
-              <div className="float-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#0A84FF] to-[#19C6FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/30 transition group-active:scale-95">
+              <div className="logo-action-icon float-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] text-[#FFFFFF] shadow-lg transition group-active:scale-95">
                 <Waves size={31} strokeWidth={2.5} />
               </div>
 

@@ -4,7 +4,7 @@
 
 body {
   min-height: 100dvh;
-  background: #0d1626;
+  background: #020407;
   color: white;
   overscroll-behavior-y: none;
   -webkit-font-smoothing: antialiased;
@@ -30,9 +30,10 @@ textarea {
 
 .app-bg {
   background:
-    radial-gradient(circle at 50% -10%, rgba(10, 132, 255, 0.18), transparent 38%),
-    radial-gradient(circle at 100% 15%, rgba(25, 198, 255, 0.08), transparent 30%),
-    linear-gradient(180deg, #0d1626 0%, #071426 52%, #050b14 100%);
+    radial-gradient(circle at 50% -12%, rgba(10, 132, 255, 0.24), transparent 34%),
+    radial-gradient(circle at 110% 12%, rgba(25, 198, 255, 0.09), transparent 27%),
+    radial-gradient(circle at -15% 70%, rgba(191, 200, 212, 0.06), transparent 32%),
+    linear-gradient(180deg, #020407 0%, #050b14 45%, #020407 100%);
 }
 
 .app-bg::before {
@@ -52,8 +53,9 @@ textarea {
   position: relative;
   overflow: hidden;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
-    #071426;
+    linear-gradient(145deg, rgba(247, 249, 252, 0.07), rgba(247, 249, 252, 0.012)),
+    linear-gradient(180deg, rgba(10, 132, 255, 0.06), transparent 55%),
+    #050b14;
 }
 
 .premium-card::before {
@@ -61,7 +63,7 @@ textarea {
   inset: 0;
   pointer-events: none;
   content: "";
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.11), transparent 32%);
+  background: linear-gradient(135deg, rgba(247, 249, 252, 0.15), transparent 31%);
   opacity: 0.55;
 }
 
@@ -86,10 +88,22 @@ textarea {
   width: 48%;
   pointer-events: none;
   content: "";
-  background: radial-gradient(circle at center, rgba(25, 198, 255, 0.13), transparent 58%);
+  background:
+    radial-gradient(circle at center, rgba(25, 198, 255, 0.18), transparent 58%),
+    linear-gradient(90deg, transparent, rgba(247, 249, 252, 0.08));
   opacity: 0;
   transition: opacity 200ms ease, transform 200ms ease;
   transform: translateX(8px);
+}
+
+.logo-action-icon {
+  border: 1px solid rgba(247, 249, 252, 0.16);
+  background:
+    linear-gradient(145deg, rgba(247, 249, 252, 0.35), rgba(247, 249, 252, 0.04) 38%, transparent 39%),
+    linear-gradient(135deg, #020407 0%, #0a84ff 58%, #19c6ff 100%);
+  box-shadow:
+    0 12px 28px rgba(10, 132, 255, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .interactive-card:hover::after,
@@ -115,7 +129,7 @@ textarea {
 }
 
 .live-dot {
-  box-shadow: 0 0 0 rgba(25, 198, 255, 0.65);
+  box-shadow: 0 0 0 rgba(10, 132, 255, 0.7);
   animation: livePulse 1.8s ease-out infinite;
 }
 

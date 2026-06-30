@@ -16,7 +16,7 @@ export default function PrimaryButton({
       {...props}
       className={`
         shine-button relative w-full overflow-hidden rounded-full
-        bg-gradient-to-r from-[#0A84FF] via-[#0878F0] to-[#19C6FF]
+        bg-gradient-to-r from-[#006BEA] via-[#0A84FF] to-[#19C6FF]
         px-7 py-4 text-base font-black text-[#FFFFFF]
         shadow-xl shadow-[#0A84FF]/35
         transition-all duration-200

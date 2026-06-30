@@ -19,7 +19,7 @@ export default function FormShell({
   return (
     <div className="flex flex-1 flex-col pt-1">
       <div className="mb-5 flex items-center gap-4">
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-[#0A84FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/25">
+        <div className="logo-action-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] text-[#FFFFFF] shadow-lg">
           {icon}
         </div>
 

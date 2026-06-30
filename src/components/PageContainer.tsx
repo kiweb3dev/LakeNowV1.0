@@ -44,7 +44,7 @@ export default function PageContainer({
 
       <style jsx global>{`
         html {
-          background: #0d1626;
+          background: #020407;
         }
 
         body {

@@ -24,7 +24,7 @@ export default function BottomNav({ active }: BottomNavProps) {
       className="fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[430px] px-4"
       style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 1rem)" }}
     >
-      <nav className="premium-card rounded-[28px] border border-[#19C6FF]/25 px-2 py-2 shadow-2xl shadow-black/60 backdrop-blur-xl">
+      <nav className="premium-card rounded-[28px] border border-[#19C6FF]/25 px-2 py-2 shadow-2xl shadow-black/70 backdrop-blur-xl">
         <div className="grid grid-cols-4 gap-1">
           {items.map((item) => {
             const Icon = item.icon;
@@ -36,12 +36,12 @@ export default function BottomNav({ active }: BottomNavProps) {
                 onClick={() => router.push(item.href)}
                 className={`relative flex min-h-[62px] flex-col items-center justify-center rounded-[22px] text-xs font-black transition duration-200 active:scale-[0.97] ${
                   isActive
-                    ? "bg-gradient-to-br from-[#0A84FF] to-[#0878F0] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/30"
-                    : "text-[#FFFFFF]/85 hover:bg-[#0D1626]/80 hover:text-[#FFFFFF]"
+                    ? "bg-gradient-to-br from-[#F7F9FC] via-[#BFC8D4] to-[#0A84FF] text-[#020407] shadow-lg shadow-[#0A84FF]/30"
+                    : "text-[#FFFFFF]/88 hover:bg-[#0D1626]/80 hover:text-[#FFFFFF]"
                 }`}
               >
                 {isActive && (
-                  <span className="absolute top-2 h-1 w-6 rounded-full bg-[#FFFFFF]/80" />
+                  <span className="absolute top-2 h-1 w-6 rounded-full bg-[#0A84FF]/90" />
                 )}
                 <Icon size={23} strokeWidth={2.8} />
                 <span className="mt-1">{item.label}</span>

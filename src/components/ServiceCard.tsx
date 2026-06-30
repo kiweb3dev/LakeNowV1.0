@@ -29,7 +29,7 @@ export default function ServiceCard({
       "
     >
       <div className="flex items-center gap-4 text-left">
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#0A84FF] to-[#19C6FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/30 transition duration-200 group-active:scale-95">
+        <div className="logo-action-icon flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] text-[#FFFFFF] shadow-lg transition duration-200 group-active:scale-95">
           {icon}
         </div>
 
