@@ -129,7 +129,7 @@ export default function DeliveryPage() {
 
           <button
             onClick={() => router.back()}
-            className="w-full rounded-full border border-[#FFFFFF]/10 bg-transparent py-4 text-base font-black text-[#FFFFFF]/80 transition active:scale-[0.985]"
+            className="w-full rounded-full border border-[#FFFFFF]/20 bg-[#071426] py-4 text-base font-black text-[#FFFFFF] shadow-lg shadow-black/20 transition active:scale-[0.985]"
           >
             Back
           </button>

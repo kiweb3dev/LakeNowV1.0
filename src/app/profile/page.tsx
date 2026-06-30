@@ -4,6 +4,7 @@ import { Heart, MessageCircle, ShieldCheck } from "lucide-react";
 
 import PageContainer from "@/components/PageContainer";
 import Card from "@/components/Card";
+import FeedbackForm from "@/components/FeedbackForm";
 
 export default function ProfilePage() {
   return (
@@ -19,7 +20,7 @@ export default function ProfilePage() {
           </h1>
 
           <p className="mt-3 max-w-xs text-sm font-semibold leading-relaxed text-[#FFFFFF]/70">
-            LakeNow is in public beta for Lake of the Ozarks.
+            LakeNow is opening early access for Lake of the Ozarks.
           </p>
         </div>
 
@@ -51,13 +52,17 @@ export default function ProfilePage() {
               />
               <div>
                 <p className="font-black text-[#FFFFFF]">
-                  Public beta
+                  Early access
                 </p>
                 <p className="mt-1 text-sm font-semibold leading-relaxed text-[#FFFFFF]/70">
-                  Every request helps us improve before the full launch.
+                  Every request and recommendation helps us shape LakeNow before wider service availability.
                 </p>
               </div>
             </div>
+          </Card>
+
+          <Card>
+            <FeedbackForm />
           </Card>
         </div>
       </div>

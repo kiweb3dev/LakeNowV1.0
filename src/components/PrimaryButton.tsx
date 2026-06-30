@@ -15,12 +15,13 @@ export default function PrimaryButton({
     <button
       {...props}
       className={`
-        relative w-full overflow-hidden rounded-full
-        bg-[#0A84FF]
+        shine-button relative w-full overflow-hidden rounded-full
+        bg-gradient-to-r from-[#0A84FF] via-[#0878F0] to-[#19C6FF]
         px-7 py-4 text-base font-black text-[#FFFFFF]
-        shadow-xl shadow-[#0A84FF]/30
-        transition-all duration-150
-        active:scale-[0.985]
+        shadow-xl shadow-[#0A84FF]/35
+        transition-all duration-200
+        hover:shadow-[#19C6FF]/25
+        active:scale-[0.975]
         disabled:cursor-not-allowed disabled:opacity-50
         ${className}
       `}

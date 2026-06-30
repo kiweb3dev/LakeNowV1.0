@@ -24,11 +24,12 @@ export default function PageContainer({
     : "calc(env(safe-area-inset-bottom) + 1.5rem)";
 
   return (
-    <main className="relative min-h-dvh overflow-x-hidden bg-[#0D1626] text-[#FFFFFF]">
+    <main className="app-bg relative min-h-dvh overflow-x-hidden text-[#FFFFFF]">
       <div className="pointer-events-none fixed -top-32 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-[#0A84FF]/18 blur-3xl" />
+      <div className="pointer-events-none fixed bottom-24 right-[-120px] h-72 w-72 rounded-full bg-[#19C6FF]/10 blur-3xl" />
 
       <div
-        className="relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col px-4"
+        className="screen-pop relative mx-auto flex min-h-dvh w-full max-w-[430px] flex-col px-4"
         style={{
           animation: "pageIn 150ms ease-out both",
           paddingBottom: bottomPadding,

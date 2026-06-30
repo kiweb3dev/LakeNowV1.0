@@ -8,7 +8,7 @@ export default function BetaBanner() {
           LakeNow Beta
         </p>
         <p className="mt-0.5 text-xs font-semibold text-[#FFFFFF]/75">
-          100 requests = public launch.
+          Early access is open.
         </p>
       </div>
 

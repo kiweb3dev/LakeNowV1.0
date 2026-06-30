@@ -20,18 +20,16 @@ export default function ServiceCard({
     <button
       onClick={onClick}
       className="
-        group w-full rounded-[24px]
+        premium-card tap-card group w-full rounded-[24px]
         border border-[#FFFFFF]/10
-        bg-[#071426]
         p-4 text-[#FFFFFF]
-        shadow-lg shadow-black/20
-        transition-all duration-150
-        hover:border-[#19C6FF]/70
-        active:scale-[0.985]
+        shadow-xl shadow-black/25
+        transition-all duration-200
+        hover:border-[#19C6FF]/70 hover:shadow-[#0A84FF]/20
       "
     >
       <div className="flex items-center gap-4 text-left">
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-[#0A84FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/25">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-[#0A84FF] to-[#19C6FF] text-[#FFFFFF] shadow-lg shadow-[#0A84FF]/30 transition duration-200 group-active:scale-95">
           {icon}
         </div>
 
@@ -46,7 +44,7 @@ export default function ServiceCard({
         </div>
 
         <ChevronRight
-          className="shrink-0 text-[#FFFFFF]/70 transition group-active:translate-x-0.5"
+          className="shrink-0 text-[#19C6FF] transition duration-200 group-hover:translate-x-0.5 group-active:translate-x-1"
           size={24}
           strokeWidth={2.8}
         />
