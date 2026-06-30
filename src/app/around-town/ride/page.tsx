@@ -9,6 +9,7 @@ import PageContainer from "@/components/PageContainer";
 import FormShell from "@/components/FormShell";
 import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
+import LocateMeButton from "@/components/LocateMeButton";
 
 function digitsOnly(value: string) {
   return value.replace(/\D/g, "");
@@ -98,6 +99,10 @@ export default function RidePage() {
             required
             value={form.pickup}
             onChange={(e) => setForm({ ...form, pickup: e.target.value })}
+          />
+
+          <LocateMeButton
+            onLocation={(pickup) => setForm({ ...form, pickup })}
           />
 
           <TextInput

@@ -10,6 +10,7 @@ import FormShell from "@/components/FormShell";
 import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
 import TextArea from "@/components/TextArea";
+import LocateMeButton from "@/components/LocateMeButton";
 
 function digitsOnly(value: string) {
   return value.replace(/\D/g, "");
@@ -112,6 +113,11 @@ export default function BoatDeliveryPage() {
             onChange={(e) =>
               setForm({ ...form, destination: e.target.value })
             }
+          />
+
+          <LocateMeButton
+            label="Use My Dock Location"
+            onLocation={(destination) => setForm({ ...form, destination })}
           />
 
           <TextArea

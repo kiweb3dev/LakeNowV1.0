@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import {
   Car,
   Package,
@@ -12,6 +13,8 @@ import {
   Target,
   FileText,
   User,
+  LogOut,
+  ExternalLink,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
@@ -56,31 +59,87 @@ function formatCentralTime(value: string) {
   }).format(new Date(value));
 }
 
+function getMapUrl(value: string | null) {
+  if (!value) return null;
+
+  const match = value.match(/https:\/\/www\.google\.com\/maps\?q=[^\s)]+/);
+  return match?.[0] || null;
+}
+
+function DetailRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+}) {
+  const mapUrl = getMapUrl(value);
+
+  return (
+    <div className="rounded-[18px] border border-[#FFFFFF]/8 bg-[#020407]/45 p-3">
+      <div className="flex items-start gap-3">
+        <div className="mt-0.5 shrink-0 text-[#19C6FF]">{icon}</div>
+
+        <div className="min-w-0 flex-1 text-left">
+          <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#FFFFFF]/45">
+            {label}
+          </p>
+          <p className="mt-1 break-words text-sm font-semibold leading-relaxed text-[#FFFFFF]">
+            {value}
+          </p>
+        </div>
+      </div>
+
+      {mapUrl && (
+        <a
+          href={mapUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-3 inline-flex items-center gap-1 rounded-full border border-[#19C6FF]/25 bg-[#0A84FF]/15 px-3 py-2 text-xs font-black text-[#D9F4FF]"
+        >
+          Open Map <ExternalLink size={13} />
+        </a>
+      )}
+    </div>
+  );
+}
+
 export default function DispatchPage() {
   const [requests, setRequests] = useState<Request[]>([]);
 
   async function fetchRequests() {
-    const { data, error } = await supabase
-      .from("requests")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const response = await fetch("/api/dispatch-requests", {
+      cache: "no-store",
+    });
 
-    if (error) {
-      alert(error.message);
+    if (response.status === 401) {
+      window.location.href = "/dispatch/login";
       return;
     }
 
-    setRequests(data || []);
+    const body = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      alert(body?.error || "Unable to load dispatch requests.");
+      return;
+    }
+
+    setRequests(body?.requests || []);
   }
 
   async function updateStatus(id: string, status: string) {
-    const { error } = await supabase
-      .from("requests")
-      .update({ status })
-      .eq("id", id);
+    const response = await fetch(`/api/dispatch-requests/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
 
-    if (error) {
-      alert(error.message);
+    const body = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      alert(body?.error || "Unable to update request status.");
       return;
     }
 
@@ -91,8 +150,15 @@ export default function DispatchPage() {
     );
   }
 
+  async function logout() {
+    await fetch("/api/dispatch-logout", { method: "POST" });
+    window.location.href = "/dispatch/login";
+  }
+
   useEffect(() => {
     fetchRequests();
+
+    const interval = window.setInterval(fetchRequests, 15000);
 
     const channel = supabase
       .channel("dispatch-center")
@@ -104,18 +170,29 @@ export default function DispatchPage() {
       .subscribe();
 
     return () => {
+      window.clearInterval(interval);
       supabase.removeChannel(channel);
     };
   }, []);
 
   return (
     <PageContainer>
-      <Logo size={56} />
+      <div className="flex items-center justify-center">
+        <Logo size={92} />
+      </div>
 
       <PageHeader
         title="Dispatch Center"
         subtitle="Live LakeNow requests, ready to accept and complete."
       />
+
+      <button
+        onClick={logout}
+        className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#FFFFFF]/15 bg-[#050B14]/80 px-4 py-3 text-sm font-black text-[#FFFFFF]/75 transition active:scale-[0.985]"
+      >
+        <LogOut size={17} />
+        Sign Out
+      </button>
 
       <div className="mt-6 space-y-4">
         {requests.length === 0 && (
@@ -130,27 +207,29 @@ export default function DispatchPage() {
 
           return (
             <Card key={request.id}>
-              <div className="flex flex-col items-center text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full border border-blue-400 bg-blue-600/30 text-blue-200">
+              <div className="flex items-start gap-4">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[18px] border border-[#19C6FF]/35 bg-[#0A84FF]/20 text-[#D9F4FF]">
                   {service.icon}
                 </div>
 
-                <h3 className="mt-3 text-xl font-extrabold text-white">
-                  {service.label}
-                </h3>
+                <div className="min-w-0 flex-1">
+                  <h3 className="break-words text-xl font-black leading-tight text-white">
+                    {service.label}
+                  </h3>
 
-                <p className="mt-1 text-xs font-semibold text-white/70">
-                  {formatCentralTime(request.created_at)}
-                </p>
+                  <p className="mt-1 break-words text-xs font-semibold leading-relaxed text-white/60">
+                    {formatCentralTime(request.created_at)}
+                  </p>
+                </div>
 
                 <span
-                  className={`mt-3 rounded-full px-3 py-1 text-xs font-bold uppercase ${
+                  className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.08em] ${
                     status === "rejected"
                       ? "bg-red-600 text-white"
                       : status === "done"
                       ? "bg-green-600 text-white"
                       : status === "accepted"
-                      ? "bg-blue-600 text-white"
+                      ? "bg-yellow-400 text-black"
                       : "bg-white/10 text-white"
                   }`}
                 >
@@ -158,43 +237,48 @@ export default function DispatchPage() {
                 </span>
               </div>
 
-              <div className="mt-5 space-y-3 rounded-2xl bg-black/25 p-4 text-sm text-white">
-                <p className="flex items-center justify-center gap-2">
-                  <User size={16} /> <span className="font-semibold">Name:</span>{" "}
-                  {request.name || "No name"}
-                </p>
+              <div className="mt-5 space-y-3 rounded-[22px] border border-[#FFFFFF]/8 bg-black/25 p-3 text-sm text-white">
+                <DetailRow
+                  icon={<User size={16} />}
+                  label="Name"
+                  value={request.name || "No name"}
+                />
 
-                <p className="flex items-center justify-center gap-2">
-                  <Phone size={16} /> <span className="font-semibold">Phone:</span>{" "}
-                  {request.phone || "No phone"}
-                </p>
+                <DetailRow
+                  icon={<Phone size={16} />}
+                  label="Phone"
+                  value={request.phone || "No phone"}
+                />
 
                 {request.pickup && (
-                  <p className="flex items-center justify-center gap-2">
-                    <MapPin size={16} /> <span className="font-semibold">Pickup:</span>{" "}
-                    {request.pickup}
-                  </p>
+                  <DetailRow
+                    icon={<MapPin size={16} />}
+                    label="Pickup"
+                    value={request.pickup}
+                  />
                 )}
 
                 {request.destination && (
-                  <p className="flex items-center justify-center gap-2">
-                    <Target size={16} /> <span className="font-semibold">Destination:</span>{" "}
-                    {request.destination}
-                  </p>
+                  <DetailRow
+                    icon={<Target size={16} />}
+                    label="Destination"
+                    value={request.destination}
+                  />
                 )}
 
                 {request.items && (
-                  <p className="flex items-center justify-center gap-2">
-                    <FileText size={16} /> <span className="font-semibold">Details:</span>{" "}
-                    {request.items}
-                  </p>
+                  <DetailRow
+                    icon={<FileText size={16} />}
+                    label="Details"
+                    value={request.items}
+                  />
                 )}
               </div>
 
               <div className="mt-5 grid grid-cols-3 gap-3">
                 <button
                   onClick={() => updateStatus(request.id, "accepted")}
-                  className="rounded-2xl bg-blue-600 py-4 text-sm font-bold text-white transition active:scale-[0.97] hover:bg-blue-500"
+                  className="rounded-2xl bg-yellow-400 py-4 text-sm font-black text-black shadow-lg shadow-yellow-500/20 transition active:scale-[0.97] hover:bg-yellow-300"
                 >
                   Accept
                 </button>

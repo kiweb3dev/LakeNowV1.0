@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Car,
@@ -10,36 +9,9 @@ import {
 
 import PageContainer from "@/components/PageContainer";
 import Logo from "@/components/Logo";
-import { supabase } from "@/lib/supabase";
-
-const BETA_COUNTER_START_AT =
-  process.env.NEXT_PUBLIC_BETA_COUNTER_START_AT ?? "2026-06-30T05:25:08.000Z";
 
 export default function Home() {
   const router = useRouter();
-  const [requestCount, setRequestCount] = useState(0);
-
-  useEffect(() => {
-    async function getCount() {
-      const { data, error } = await supabase
-        .from("requests")
-        .select("phone")
-        .gte("created_at", BETA_COUNTER_START_AT)
-        .neq("type", "beta_feedback");
-
-      if (error || !data) return;
-
-      const uniquePhones = new Set(
-        data
-          .map((request: { phone: string | null }) => request.phone?.trim())
-          .filter(Boolean)
-      );
-
-      setRequestCount(uniquePhones.size);
-    }
-
-    getCount();
-  }, []);
 
   return (
     <PageContainer activeTab="home" showNav>
@@ -67,30 +39,7 @@ export default function Home() {
           </p>
         </section>
 
-        <section className="premium-card mt-5 rounded-[22px] border border-[#FFFFFF]/10 px-4 py-3 shadow-xl shadow-black/25">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-[#19C6FF]">
-                LakeNow Requests
-              </p>
-              <p className="mt-1 text-xs font-semibold text-[#FFFFFF]/55">
-                Beta request count
-              </p>
-            </div>
-
-            <div className="rounded-[18px] border border-[#19C6FF]/20 bg-[#020407]/70 px-4 py-2">
-              <p className="count-pop text-[32px] font-black leading-none text-[#FFFFFF]">
-                {requestCount}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-3 h-1 overflow-hidden rounded-full bg-[#020407]">
-            <div className="h-full w-full rounded-full bg-gradient-to-r from-[#0A84FF] to-[#19C6FF]" />
-          </div>
-        </section>
-
-        <section className="mt-5 space-y-3">
+        <section className="mt-8 space-y-3">
           <button
             onClick={() => router.push("/around-town")}
             className="interactive-card premium-card tap-card group w-full rounded-[24px] border border-[#FFFFFF]/10 p-4 text-left shadow-xl shadow-black/25 transition-all duration-200 hover:border-[#19C6FF]/60"

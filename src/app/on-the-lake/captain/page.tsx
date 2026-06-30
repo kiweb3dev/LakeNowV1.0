@@ -10,6 +10,7 @@ import FormShell from "@/components/FormShell";
 import PrimaryButton from "@/components/PrimaryButton";
 import TextInput from "@/components/TextInput";
 import TextArea from "@/components/TextArea";
+import LocateMeButton from "@/components/LocateMeButton";
 
 function digitsOnly(value: string) {
   return value.replace(/\D/g, "");
@@ -173,6 +174,17 @@ export default function CaptainPage() {
             value={form.boat_location}
             onChange={(e) =>
               setForm({ ...form, boat_location: e.target.value })
+            }
+          />
+
+          <LocateMeButton
+            label={
+              captainNeed === "captain_my_boat"
+                ? "Use My Boat Location"
+                : "Use My Pickup Location"
+            }
+            onLocation={(boat_location) =>
+              setForm({ ...form, boat_location })
             }
           />
 
